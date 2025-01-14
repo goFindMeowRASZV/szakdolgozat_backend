@@ -28,4 +28,10 @@ class Report extends Model
         'number_of_individuals',
         'disappearance_date'
     ];
+ /*    protected static function booted()
+    {
+        static::creating(function ($report) {
+            $report->expiration_date = now()->addWeeks(2); // 2 hét hozzáadása a létrehozás dátumához, a creation_datehez kell majd 2 hetet, timestamp
+        });
+    } */
 }

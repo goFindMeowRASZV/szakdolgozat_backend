@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,7 +17,7 @@ return new class extends Migration
             $table->id('user_id');
             $table->string('name', 30);
             $table->string('email', 35)->unique();
-            $table->string('password', 50);
+            $table->string('password');
             $table->string('phone_number', 20)->nullable();
             $table->string('profile_picture', 500)->nullable();
             $table->integer('role'); //admin 0, mento 1, felhasznalo 2
@@ -23,6 +25,44 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        User::create([
+            'name'=> 'admin',
+            'email'=> 'admin@admin.hu',
+            'password'=> Hash::make('admin1234'),
+            'phone_number'=> '12345677876',
+            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'role'=> 0
+        ]);
+
+        User::create([
+            'name'=> 'staff',
+            'email'=> 'staff@staff.hu',
+            'password'=> Hash::make('staff1234'),
+            'phone_number'=> '12345677877',
+            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'role'=> 1
+        ]);
+
+        User::create([
+            'name'=> 'user',
+            'email'=> 'user@user.hu',
+            'password'=> Hash::make('user1234'),
+            'phone_number'=> '12345677878',
+            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'role'=> 2
+        ]);
+
+        
+        User::create([
+            'name'=> 'user2',
+            'email'=> 'user2@user2.hu',
+            'password'=> Hash::make('user21234'),
+            'phone_number'=> '12345677879',
+            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'role'=> 2
+        ]);
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
