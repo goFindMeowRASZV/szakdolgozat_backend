@@ -19,6 +19,7 @@ class UserController extends Controller
     {
         $record = new User();
         $record->fill($request->all()); 
+        $record->password = Hash::make($request->password);
         $record->save(); 
 
     }
@@ -36,6 +37,7 @@ class UserController extends Controller
     {
         $record = $this->show($id);
         $record->fill($request->all());
+        $record->password = Hash::make($request->password);
         $record->save();
 
     }

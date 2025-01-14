@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone_number', 20)->nullable();
             $table->string('profile_picture', 500)->nullable();
-            $table->integer('role'); //admin 0, mento 1, felhasznalo 2
+            $table->integer('role')-> default(2); //admin 0, mento 1, felhasznalo 2
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
