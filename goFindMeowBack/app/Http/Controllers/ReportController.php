@@ -12,9 +12,24 @@ class ReportController extends Controller
     public function store(Request $request): Response
     {
     
-        $report = Report::create([
 
-            'name' => $request->name,
+        $request->validate([
+            'status' => [],
+            'address' =>[],
+            'color' => [],
+            'pattern' => [],
+            'other_identifying_marks' => [],
+            'needs_help'=> [],
+            'health_status'=> [],
+            'photo'=> [],
+            'chip_number'=> [],
+            'circumstances'=> [],
+            'number_of_individuals'=> [],
+            'disappearance_date'=> []
+        ]);
+
+
+        $report = Report::create([
             'status' => $request->status,
             'address' => $request-> address,
             'color' => $request -> color,
@@ -29,8 +44,7 @@ class ReportController extends Controller
             'disappearance_date'=> $request -> disappearance_date
         ]);
 
-        event(new $report);
-
+        $report->save(); 
         return response()->noContent();
     }
 }
