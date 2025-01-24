@@ -22,4 +22,10 @@ class ShelteredCat extends Model
         'breed',
         'photo'
     ];
+
+    //USerController macskak_mentoi
+    public function rescuer()
+    {
+        return $this->belongsTo(User::class, 'rescuer');
+    }
 }
