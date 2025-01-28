@@ -28,4 +28,9 @@ class Report extends Model
         'number_of_individuals',
         'disappearance_date'
     ];
+
+    protected $casts = [
+        'color' => 'array',
+        'pattern' => 'array',
+    ];
 }
