@@ -42,14 +42,14 @@ class ReportController extends Controller
             'address' => ['required', 'string', 'max:100'],
             'color' => ['required', 'array'],
             'pattern' => ['required', 'array'],
-            'other_identifying_marks' => ['required', 'string', 'max:250'],
-            'needs_help' => ['required', 'boolean'],
-            'health_status' => ['required', 'string', 'max:250'],
-            'photo' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg','max:2048'],
-            'chip_number' => ['required', 'bigInteger'],
-            'circumstances' => ['required', 'string', 'max:250'],
-            'number_of_individuals' => ['required', 'integer'],
-            'disappearance_date' => ['required', 'date']
+            'other_identifying_marks' => ['string', 'max:250'],
+            'needs_help' => ['boolean'],
+            'health_status' => ['string', 'max:250'],
+            'photo' => [/* 'required',  */'image','mimes:jpeg,png,jpg,gif,svg','max:2048'],
+            'chip_number' => ['bigInteger'],
+            'circumstances' => ['string', 'max:250'],
+            'number_of_individuals' => ['integer'],
+            'disappearance_date' => ['date']
         ]);
 
 
