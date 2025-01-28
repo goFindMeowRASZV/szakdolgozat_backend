@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\User;
+
 use App\Models\ShelteredCat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -51,22 +53,5 @@ class UserController extends Controller
         return response()->json(["user" => $user]);
     }
 
-    //felhasznalo szerepkorok
-    public function felhasznalo_szerepkorok($role)
-    {
-        $users = DB::table('users')
-            ->select('name', 'email', 'role')
-            ->where('role', '=', $role)
-            ->get();
-        return $users;
-    }
-
-
-    //ShelteredCAt.php val withes!
-    public function macskak_mentoi()
-    {
-        $cats = ShelteredCat::with('rescuer') 
-            ->get(['cat_id', 'status', 'kennel_number', 'breed']);  
-        return $cats;
-    }
+    
 }

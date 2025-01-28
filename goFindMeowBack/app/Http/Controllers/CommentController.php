@@ -9,12 +9,36 @@ use Illuminate\Support\Facades\Response;
 
 class CommentController extends Controller
 {
+
+    public function index()
+    {
+        return Comment::all();
+    }
+
+    public function show(string $id)
+    {
+        return Comment::find($id);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $record = Comment::find($id);
+        $record->fill($request->all());
+        $record->save();
+    }
+
+    public function destroy(string $id)
+    {
+        Comment::find($id)->delete();
+    }
+
+
     public function store(Request $request): Response
     {
         //VALIDALAS MINDENHOVA!!!
         $request->validate([
-            'content' => ['required', 'string','max:250'],
-            'photo' => ['required', 'string','max:250']
+            'content' => ['required', 'string', 'max:250'],
+            'photo' => ['required', 'string', 'max:250']
         ]);
 
 
@@ -25,16 +49,5 @@ class CommentController extends Controller
 
         $comment->save();
         return response()->noContent();
-    }
-
-
-    //kommentek adott bejelenteshez
-    public function kommentek_bejelentes($reportId)
-    {
-        $comments = DB::table('comments')
-            ->select('user','content', 'photo')
-            ->where('report', '=', $reportId)
-            ->get();
-        return $comments;
     }
 }
