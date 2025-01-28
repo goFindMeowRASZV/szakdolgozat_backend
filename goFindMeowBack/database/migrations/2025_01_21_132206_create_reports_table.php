@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('status',1);//Talált, Keresett, Látott, Menhely
             $table->timestamps();
             $table->date('expiration_date');
-            $table->string('address');
+            $table->string('address',100);
             $table->float('latitude'); //szelessegi_fok
             $table->float('longitude'); //hosszusagi_fok
             $table->string('color');

@@ -13,20 +13,21 @@ class ReportController extends Controller
 
     public function store(Request $request): Response
     {
+
         //VALIDALAS MINDENHOVA!!!
         $request->validate([
-            'status' => [],
-            'address' => [],
-            'color' => [],
-            'pattern' => [],
-            'other_identifying_marks' => [],
-            'needs_help' => [],
-            'health_status' => [],
-            'photo' => [],
-            'chip_number' => [],
-            'circumstances' => [],
-            'number_of_individuals' => [],
-            'disappearance_date' => []
+            'status' => ['required', 'string', 'max:1'],
+            'address' => ['required', 'string','max:100'],
+            'color' => ['required', 'string'],
+            'pattern' => ['required', 'string'],
+            'other_identifying_marks' =>['required', 'string','max:250'],
+            'needs_help' => ['required','boolean'],
+            'health_status' => ['required', 'string','max:250'],
+            'photo' => ['required', 'string','max:500'],
+            'chip_number' => ['required', 'bigInteger'],
+            'circumstances' => ['required', 'string','max:250'],
+            'number_of_individuals' => ['required','integer'],
+            'disappearance_date' => ['required','date']
         ]);
 
 
