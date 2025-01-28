@@ -46,7 +46,7 @@ class ReportController extends Controller
             'needs_help' => ['boolean'],
             'health_status' => ['string', 'max:250'],
             'photo' => [/* 'required',  */'image','mimes:jpeg,png,jpg,gif,svg','max:2048'],
-            'chip_number' => ['bigInteger'],
+            'chip_number' => ['numeric'],
             'circumstances' => ['string', 'max:250'],
             'number_of_individuals' => ['integer'],
             'disappearance_date' => ['date']

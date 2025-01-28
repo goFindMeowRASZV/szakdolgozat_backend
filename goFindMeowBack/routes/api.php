@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +15,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::get('/users', [Controller::class, 'index']);
 
 
-Route::post('/create-report',[ReportController::class,'store']);
+Route::post('/create-report', [ReportController::class, 'store']);
 
 
 /* Admin:
@@ -38,8 +40,28 @@ Commments ->	 kommentek lekérése, együtt vagy egysével  /admin/commments  | 
 	   	 komment létrehozása 			   /admin/comment/adatok 			POST
  */
 
- Route::get('/admin/users',[UserController::class,'index']);
- Route::get('/admin/users/{id}',[UserController::class,'show']);
- Route::delete('/admin/users/{id}',[UserController::class,'destroy']);
- Route::post('/admin/users',[UserController::class,'store']);
- Route::patch('/admin/users/{id}',[UserController::class,'update']);
+Route::get('/admin/users', [UserController::class, 'index']);
+Route::get('/admin/users/{id}', [UserController::class, 'show']);
+Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
+Route::post('/admin/users', [UserController::class, 'store']);
+Route::patch('/admin/users/{id}', [UserController::class, 'update']);
+
+Route::middleware(['auth:sanctum'])
+    ->group(function () {
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+        // Kijelentkezés útvonal
+        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+    });
+
+Route::middleware(['auth:sanctum', Admin::class])
+    ->group(function () {
+        Route::get('/admin/users', [UserController::class, 'index']);
+
+        Route::get('/admin/users', [UserController::class, 'index']);
+        Route::get('/admin/users/{id}', [UserController::class, 'show']);
+        Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
+        Route::post('/admin/users', [UserController::class, 'store']);
+        Route::patch('/admin/users/{id}', [UserController::class, 'update']);
+    });
