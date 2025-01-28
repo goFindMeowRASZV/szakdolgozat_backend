@@ -45,7 +45,7 @@ class ReportController extends Controller
             'other_identifying_marks' => ['required', 'string', 'max:250'],
             'needs_help' => ['required', 'boolean'],
             'health_status' => ['required', 'string', 'max:250'],
-            'photo' => ['required', 'string', 'max:500'],
+            'photo' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg','max:2048'],
             'chip_number' => ['required', 'bigInteger'],
             'circumstances' => ['required', 'string', 'max:250'],
             'number_of_individuals' => ['required', 'integer'],
