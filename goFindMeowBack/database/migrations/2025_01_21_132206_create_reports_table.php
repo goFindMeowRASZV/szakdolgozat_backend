@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('address',100);
             $table->float('latitude'); //szelessegi_fok
             $table->float('longitude'); //hosszusagi_fok
-            $table->string('color');
-            $table->string('pattern');
+            $table->json('color');
+            $table->json('pattern');
             $table->string('other_identifying_marks',250)->nullable();
             $table->boolean('needs_help');
             $table->string('health_status', 250)->nullable();

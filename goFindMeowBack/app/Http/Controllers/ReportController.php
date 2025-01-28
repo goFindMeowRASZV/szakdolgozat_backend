@@ -40,8 +40,8 @@ class ReportController extends Controller
         $request->validate([
             'status' => ['required', 'string', 'max:1'],
             'address' => ['required', 'string', 'max:100'],
-            'color' => ['required', 'string'],
-            'pattern' => ['required', 'string'],
+            'color' => ['required', 'array'],
+            'pattern' => ['required', 'array'],
             'other_identifying_marks' => ['required', 'string', 'max:250'],
             'needs_help' => ['required', 'boolean'],
             'health_status' => ['required', 'string', 'max:250'],
@@ -56,8 +56,8 @@ class ReportController extends Controller
         $report = Report::create([
             'status' => $request->status,
             'address' => $request->address,
-            'color' => $request->color,
-            'pattern' => $request->pattern,
+            'color' => json_encode($request->color),  // színek mentése JSON-ként
+            'pattern' => json_encode($request->pattern),  // minták mentése JSON-ként
             'other_identifying_marks' => $request->other_identifying_marks,
             'needs_help' => $request->needs_help,
             'health_status' => $request->health_status,
