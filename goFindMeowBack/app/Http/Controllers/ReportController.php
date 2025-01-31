@@ -71,4 +71,86 @@ class ReportController extends Controller
         $report->save();
         return response()->noContent();
     }
+
+    public function get_color($color){
+        $reports = DB::table('reports')
+        ->where('color','=', $color)
+        ->get();
+        return $reports;
+    }
+
+    public function get_pattern($pattern){
+        $reports = DB::table('reports')
+        ->where('pattern','=', $pattern)
+        ->get();
+        return $reports;
+    }
+    public function get_status($status){
+        $reports = DB::table('reports')
+        ->where('status','=', $status)
+        ->get();
+        return $reports;
+    }
+    public function get_address($address){
+        $reports = DB::table('reports')
+        ->where('address','=', $address)
+        ->get();
+        return $reports;
+    }
+    public function get_chip_number($chip_number){
+        $reports = DB::table('reports')
+        ->where('chip_number','=', $chip_number)
+        ->get();
+        return $reports;
+    }
+
+    public function get_sheltered_reports() {
+        $reports = DB::table('sheltered_cats as sc')
+            ->join('reports as r', 'sc.report_id', '=', 'r.id') 
+            ->get(); 
+        return $reports;
+    }
+    
+
+    public function get_sheltered_reports_color($color) {
+        $reports = DB::table('reports as r') 
+            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
+            ->where('sc.color', '=', $color) 
+            ->get(); 
+        return $reports;
+    }
+
+    
+    public function get_sheltered_reports_pattern($pattern) {
+        $reports = DB::table('reports as r') 
+            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
+            ->where('sc.pattern', '=', $pattern) 
+            ->get(); 
+        return $reports;
+    }
+    
+    
+    public function get_sheltered_reports_status($status) {
+        $reports = DB::table('reports as r') 
+            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
+            ->where('sc.status', '=', $status) 
+            ->get(); 
+        return $reports;
+    }
+
+    public function get_sheltered_reports_address($address) {
+        $reports = DB::table('reports as r') 
+            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
+            ->where('sc.address', '=', $address) 
+            ->get(); 
+        return $reports;
+    }
+    
+    public function get_sheltered_reports_chip_number($chip_number) {
+        $reports = DB::table('reports as r') 
+            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
+            ->where('sc.chip_number', '=', $chip_number) 
+            ->get(); 
+        return $reports;
+    }
 }

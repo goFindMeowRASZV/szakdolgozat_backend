@@ -38,29 +38,6 @@ Commments ->	 kommentek lekérése, együtt vagy egysével  /admin/commments  | 
 	   	 komment létrehozása 			   /admin/comment/adatok 			POST
  */
 
-
-//autentikált réte->USER
-Route::middleware(['auth:sanctum'])
-    ->group(function () {
-        Route::get('/user', function (Request $request) {
-            return $request->user();
-        });
-        // Kijelentkezés útvonal
-        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
-
-        //Reports
-        Route::get('/get-report/{color}', [ReportController::class, 'show-color']);
-        Route::get('/get-report/{pattern}', [ReportController::class, 'show-pattern']);
-        Route::get('/get-report/{status}', [ReportController::class, 'show-status']);
-        Route::get('/get-report/{address}', [ReportController::class, 'show-address']);
-        Route::get('/get-report/{chip_number}', [ReportController::class, 'show-chip-number']);
-        //ezekre külön lekérdezések
-
-        Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
-        Route::post('/create-report', [ReportController::class, 'store']);
-        //Comments
-        Route::post('/create-comment', [CommentController::class, 'store']);
-    });
 //Admin
 Route::middleware(['auth:sanctum', Admin::class])
     ->group(function () {
@@ -73,15 +50,25 @@ Route::middleware(['auth:sanctum', Admin::class])
         //Reports
         Route::get('/admin/get-report/{id}', [ReportController::class, 'show']);
 
-        Route::get('/admin/get-report/{color}', [ReportController::class, 'show-color']);
-        Route::get('/admin/get-report/{pattern}', [ReportController::class, 'show-pattern']);
-        Route::get('/admin/get-report/{status}', [ReportController::class, 'show-status']);
-        Route::get('/admin/get-report/{address}', [ReportController::class, 'show-address']);
-        Route::get('/admin/get-report/{chip_number}', [ReportController::class, 'show-chip-number']);
+        Route::get('/admin/get-report-color/{color}', [ReportController::class, 'get_color']);
+        Route::get('/admin/get-report-pattern/{pattern}', [ReportController::class, 'get_pattern']);
+        Route::get('/admin/get-report-status/{status}', [ReportController::class, 'get_status']);
+        Route::get('/admin/get-report-address/{address}', [ReportController::class, 'get_address']);
+        Route::get('/admin/get-report-chip-number/{chip_number}', [ReportController::class, 'get_chip_number']);
 
         Route::delete('/admin/delete-report/{id}', [ReportController::class, 'destroy']);
         Route::post('/admin/create-report', [ReportController::class, 'store']);
         Route::patch('/admin/patch-report/{id}', [ReportController::class, 'update']);
+
+        //menhelyi macskák report adatai
+        Route::get('/admin/get-sheltered-reports',[ReportController::class,'get_sheltered_reports']);
+        Route::get('/admin/get-sheltered-reports-color',[ReportController::class,'get_sheltered_reports_color']);
+        Route::get('/admin/get-sheltered-reports-pattern',[ReportController::class,'get_sheltered_reports_pattern']);
+        Route::get('/admin/get-sheltered-reports-status',[ReportController::class,'get_sheltered_reports_status']);
+        Route::get('/admin/get-sheltered-reports-address',[ReportController::class,'get_sheltered_reports_address']);
+        Route::get('/admin/get-sheltered-reports-chip-number',[ReportController::class,'get_sheltered_reports_chip_number']);
+
+
         //ShelteredCats
         Route::get('/admin/get-sheltered-cat/{id}', [ShelteredCatController::class, 'show']);
         Route::delete('/admin/delete-sheltered-cat/{id}', [ShelteredCatController::class, 'destroy']);
@@ -99,11 +86,11 @@ Route::middleware(['auth:sanctum', Staff::class])
         //Reports
         Route::get('/staff/get-report/{id}', [ReportController::class, 'show']);
 
-        Route::get('/staff/get-report/{color}', [ReportController::class, 'show-color']);
-        Route::get('/staff/get-report/{pattern}', [ReportController::class, 'show-pattern']);
-        Route::get('/staff/get-report/{status}', [ReportController::class, 'show-status']);
-        Route::get('/staff/get-report/{address}', [ReportController::class, 'show-address']);
-        Route::get('/staff/get-report/{chip_number}', [ReportController::class, 'show-chip-number']);
+        Route::get('/staff/get-report-color/{color}', [ReportController::class, 'get_color']);
+        Route::get('/staff/get-report-pattern/{pattern}', [ReportController::class, 'get_pattern']);
+        Route::get('/staff/get-report-status/{status}', [ReportController::class, 'get_status']);
+        Route::get('/staff/get-report-address/{address}', [ReportController::class, 'get_address']);
+        Route::get('/staff/get-report-chip-number/{chip_number}', [ReportController::class, 'get_chip_number']);
 
         Route::delete('/staff/delete-report/{id}', [ReportController::class, 'destroy']);
         Route::post('/staff/create-report', [ReportController::class, 'store']);
@@ -117,3 +104,25 @@ Route::middleware(['auth:sanctum', Staff::class])
         Route::post('/staff/create-comment', [CommentController::class, 'store']);
     });
 
+//autentikált réteg->USER
+Route::middleware(['auth:sanctum'])
+    ->group(function () {
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+        // Kijelentkezés útvonal
+        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+
+        //Reports
+        Route::get('/get-report-color/{color}', [ReportController::class, 'get_color']);
+        Route::get('/get-report-pattern/{pattern}', [ReportController::class, 'get_pattern']);
+        Route::get('/get-report-status/{status}', [ReportController::class, 'get_status']);
+        Route::get('/get-report-address/{address}', [ReportController::class, 'get_address']);
+        Route::get('/get-report-chip-number/{chip_number}', [ReportController::class, 'get_chip_number']);
+      
+        
+        Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
+        Route::post('/create-report', [ReportController::class, 'store']);
+        //Comments
+        Route::post('/create-comment', [CommentController::class, 'store']);
+    });
