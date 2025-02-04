@@ -36,26 +36,19 @@ class ReportController extends Controller
     public function store(Request $request): Response
     {
 
-        /* $request->validate([
-            'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg |max:2048',
-        ]);
-        $fileName = time().'.'.$request->file->extension();  
-        $request->file('photo')->move(public_path('uploads'), $fileName);
- */
-
         $request->validate([
-            'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
+            'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg |max:2048',
+           
         ]);
-
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $fileName = time() . '.' . $file->extension();
-            $file->move(public_path('uploads'), $fileName);
-
-            return response()->json(['message' => 'Feltöltés sikeres!', 'path' => 'uploads/' . $fileName]);
-        }
-
-        return response()->json(['message' => 'Nem érkezett fájl.'], 400);
+        $file = $request->file('name');   // fájl nevének lekérése  
+        $extension = $file->getClientOriginalName(); //kiterjesztés
+        $imageName = time() . '.' . $extension; // a kép neve az időbéjegnek köszönhetően egyedi lesz. 
+        $file->move(public_path('kepek'), $imageName); //átmozgatjuk a public mappa kepek könyvtárába 
+        $kepek = new Report(); // Létrehozzuk a kép objektumot. 
+        $kepek->name = 'kepek/' . $imageName; // megadjuk az új fájl elérési utját
+        $kepek->title = $request->title; // megadjuk a kép címét
+        $kepek->save(); //elmentjük
+       
 
         //VALIDALAS MINDENHOVA!!!
         $request->validate([
