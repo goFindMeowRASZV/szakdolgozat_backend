@@ -75,7 +75,7 @@ class ReportController extends Controller
             'other_identifying_marks' => $request->other_identifying_marks,
             'needs_help' => $request->needs_help,
             'health_status' => $request->health_status,
-            'photo' => $fileName,
+            'photo' => $imageName,
             'chip_number' => $request->chip_number,
             'circumstances' => $request->circumstances,
             'number_of_individuals' => $request->number_of_individuals,
