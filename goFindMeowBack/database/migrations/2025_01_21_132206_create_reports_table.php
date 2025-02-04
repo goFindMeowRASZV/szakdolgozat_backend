@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('other_identifying_marks',250)->nullable();
             $table->boolean('needs_help');
             $table->string('health_status', 250)->nullable();
-            $table->string('photo',500)->nullable();
+            $table->string('photo',2048)->nullable();
             $table->bigInteger('chip_number')->nullable();
             $table->string('circumstances',250)->nullable();
             $table->integer('number_of_individuals')->nullable()-> default(1);
