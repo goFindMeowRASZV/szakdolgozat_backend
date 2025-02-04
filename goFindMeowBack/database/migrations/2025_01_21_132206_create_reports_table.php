@@ -19,8 +19,8 @@ return new class extends Migration
             $table->timestamps();
             $table->date('expiration_date');
             $table->string('address',100);
-            $table->float('latitude'); //szelessegi_fok
-            $table->float('longitude'); //hosszusagi_fok
+            $table->float('latitude')->nullable();; //szelessegi_fok
+            $table->float('longitude')->nullable();; //hosszusagi_fok
             $table->json('color');
             $table->json('pattern');
             $table->string('other_identifying_marks',250)->nullable();

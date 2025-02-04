@@ -47,14 +47,19 @@ class ReportController extends Controller
         $imageName = time() . '.' . $extension; // a kép neve az időbéjegnek köszönhetően egyedi lesz. 
         $file->move(public_path('kepek'), $imageName); //átmozgatjuk a public mappa kepek könyvtárába 
         $kepek = new Report(); // Létrehozzuk a kép objektumot. 
-        $kepek->photo = 'kepek/' . $imageName; // megadjuk az új fájl elérési utját
+        $kepek-> photo = 'kepek/' . $imageName; // megadjuk az új fájl elérési utját
         $kepek->save(); //elmentjük
        
 
         //VALIDALAS MINDENHOVA!!!
-        $validated = $request->validate([
+        $request->validate([
+            'report_id' => ['required', 'integer'],
+            'creator_id' => ['required','integer'],
             'status' => ['required', 'string', 'max:1'],
+            'expiration_date' => ['required', 'date'],
             'address' => ['required', 'string', 'max:100'],
+            'latitude' => ['nullable', 'float'],
+            'longitude' => ['nullable', 'float'],
             'color' => ['required', 'array'],
             'pattern' => ['required', 'array'],
             'other_identifying_marks' => ['nullable', 'string', 'max:250'],
@@ -68,8 +73,13 @@ class ReportController extends Controller
         ]);
 
         $report = Report::create([
+  /*           'report_id'=> $request-> report_id, */
+            'creator_id' => Auth::id(),
             'status' => $request->status,
+            'expiration_date' => $request-> expiration_date,
             'address' => $request->address,
+            'latitude' => $request -> latitude,
+            'longitude'=> $request -> longitude,
             'color' => json_encode($request->color),  // színek mentése JSON-ként
             'pattern' => json_encode($request->pattern),  // minták mentése JSON-ként
             'other_identifying_marks' => $request->other_identifying_marks,
