@@ -73,7 +73,7 @@ class ReportController extends Controller
 
         $report = Report::create([
             'report_id'=> $request-> report_id,
-            'creator_id' =>$request -> creator_id,
+            'creator_id' =>$request -> Auth::id(),
             'status' => $request->status,
             'expiration_date' => $request-> expiration_date,
             'address' => $request->address,
