@@ -6,6 +6,7 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -36,22 +37,22 @@ class ReportController extends Controller
     public function store(Request $request): Response
     {
 
+
         $request->validate([
             'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg |max:2048',
            
         ]);
-        $file = $request->file('name');   // fájl nevének lekérése  
+        $file = $request->file('photo');   // fájl nevének lekérése  
         $extension = $file->getClientOriginalName(); //kiterjesztés
         $imageName = time() . '.' . $extension; // a kép neve az időbéjegnek köszönhetően egyedi lesz. 
         $file->move(public_path('kepek'), $imageName); //átmozgatjuk a public mappa kepek könyvtárába 
         $kepek = new Report(); // Létrehozzuk a kép objektumot. 
-        $kepek->name = 'kepek/' . $imageName; // megadjuk az új fájl elérési utját
-        $kepek->title = $request->title; // megadjuk a kép címét
+        $kepek->photo = 'kepek/' . $imageName; // megadjuk az új fájl elérési utját
         $kepek->save(); //elmentjük
        
 
         //VALIDALAS MINDENHOVA!!!
-        $request->validate([
+        $validated = $request->validate([
             'status' => ['required', 'string', 'max:1'],
             'address' => ['required', 'string', 'max:100'],
             'color' => ['required', 'array'],
@@ -66,7 +67,6 @@ class ReportController extends Controller
             'disappearance_date' => ['nullable', 'date']
         ]);
 
-
         $report = Report::create([
             'status' => $request->status,
             'address' => $request->address,
@@ -80,7 +80,7 @@ class ReportController extends Controller
             'circumstances' => $request->circumstances,
             'number_of_individuals' => $request->number_of_individuals,
             'disappearance_date' => $request->disappearance_date
-        ]);
+        ]); 
 
         $report->save();
         return response()->noContent();
