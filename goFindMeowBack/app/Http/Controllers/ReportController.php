@@ -36,6 +36,12 @@ class ReportController extends Controller
     public function store(Request $request): Response
     {
 
+        $request->validate([
+            'photo' => 'required|mimes:jpg,png,gif,jpeg,svg |max:2048',
+        ]);
+        $fileName = time().'.'.$request->file->extension();  
+        $request->file->move(public_path('uploads'), $fileName);
+
         //VALIDALAS MINDENHOVA!!!
         $request->validate([
             'status' => ['required', 'string', 'max:1'],
@@ -45,7 +51,7 @@ class ReportController extends Controller
             'other_identifying_marks' => ['string', 'max:250'],
             'needs_help' => ['boolean'],
             'health_status' => ['string', 'max:250'],
-            'photo' => [/* 'required',  */'image','mimes:jpeg,png,jpg,gif,svg','max:2048'],
+            'photo' => ['string'],
             'chip_number' => ['numeric'],
             'circumstances' => ['string', 'max:250'],
             'number_of_individuals' => ['integer'],
@@ -61,7 +67,7 @@ class ReportController extends Controller
             'other_identifying_marks' => $request->other_identifying_marks,
             'needs_help' => $request->needs_help,
             'health_status' => $request->health_status,
-            'photo' => $request->photo,
+            'photo' => $fileName,
             'chip_number' => $request->chip_number,
             'circumstances' => $request->circumstances,
             'number_of_individuals' => $request->number_of_individuals,
@@ -115,7 +121,7 @@ class ReportController extends Controller
     public function get_sheltered_reports_color($color) {
         $reports = DB::table('reports as r') 
             ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
-            ->where('sc.color', '=', $color) 
+            ->where('r.color', '=', $color) 
             ->get(); 
         return $reports;
     }
@@ -124,7 +130,7 @@ class ReportController extends Controller
     public function get_sheltered_reports_pattern($pattern) {
         $reports = DB::table('reports as r') 
             ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
-            ->where('sc.pattern', '=', $pattern) 
+            ->where('r.pattern', '=', $pattern) 
             ->get(); 
         return $reports;
     }
@@ -133,7 +139,7 @@ class ReportController extends Controller
     public function get_sheltered_reports_status($status) {
         $reports = DB::table('reports as r') 
             ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
-            ->where('sc.status', '=', $status) 
+            ->where('r.status', '=', $status) 
             ->get(); 
         return $reports;
     }
@@ -141,7 +147,7 @@ class ReportController extends Controller
     public function get_sheltered_reports_address($address) {
         $reports = DB::table('reports as r') 
             ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
-            ->where('sc.address', '=', $address) 
+            ->where('r.address', '=', $address) 
             ->get(); 
         return $reports;
     }
@@ -149,7 +155,7 @@ class ReportController extends Controller
     public function get_sheltered_reports_chip_number($chip_number) {
         $reports = DB::table('reports as r') 
             ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id') 
-            ->where('sc.chip_number', '=', $chip_number) 
+            ->where('r.chip_number', '=', $chip_number) 
             ->get(); 
         return $reports;
     }
