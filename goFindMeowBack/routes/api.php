@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/users', [Controller::class, 'index']);
+Route::get('/get-reports', [ReportController::class, 'index']);
 //Route::post('/create-report', [ReportController::class, 'store']);
 
 
@@ -48,6 +49,8 @@ Route::middleware(['auth:sanctum', Admin::class])
         Route::post('/admin/create-user', [UserController::class, 'store']);
         Route::patch('/admin/patch-user/{id}', [UserController::class, 'update']);
         //Reports
+
+        
         Route::get('/admin/get-report/{id}', [ReportController::class, 'show']);
 
         Route::get('/admin/get-report-color/{color}', [ReportController::class, 'get_color']);
@@ -119,7 +122,8 @@ Route::middleware(['auth:sanctum'])
         Route::get('/get-report-status/{status}', [ReportController::class, 'get_status']);
         Route::get('/get-report-address/{address}', [ReportController::class, 'get_address']);
         Route::get('/get-report-chip-number/{chip_number}', [ReportController::class, 'get_chip_number']);
-      
+     
+        
         
         Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
         Route::post('/create-report', [ReportController::class, 'store']);
