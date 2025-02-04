@@ -59,7 +59,7 @@ class ReportController extends Controller
             'other_identifying_marks' => ['nullable', 'string', 'max:250'],
             'needs_help' => ['nullable', 'boolean'],
             'health_status' => ['nullable', 'string', 'max:250'],
-            'photo' => ['nullable', 'string'],
+            /* 'photo' => ['nullable', 'string'], */
             'chip_number' => ['nullable', 'numeric'],
             'circumstances' => ['nullable', 'string', 'max:250'],
             'number_of_individuals' => ['nullable', 'integer'],
