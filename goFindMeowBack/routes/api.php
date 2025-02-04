@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/users', [Controller::class, 'index']);
-Route::post('/create-report', [ReportController::class, 'store']);
+//Route::post('/create-report', [ReportController::class, 'store']);
 
 
 /* Admin:

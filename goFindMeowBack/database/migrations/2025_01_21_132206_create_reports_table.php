@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id('report_id');
-            $table->foreignId('creator_id')->references('id')->on('users');
+            $table->foreignId('creator_id')->references('id')->on('users')->default(0);
             $table->string('status',1);//Talált, Keresett, Látott, Menhely
             $table->timestamps();
             $table->date('expiration_date');
