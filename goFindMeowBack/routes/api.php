@@ -106,7 +106,7 @@ Route::middleware(['auth:sanctum', Staff::class])
         //Comments
         Route::post('/staff/create-comment', [CommentController::class, 'store']);
     });
-
+ 
 //autentikált réteg->USER
 Route::middleware(['auth:sanctum'])
     ->group(function () {
@@ -129,4 +129,4 @@ Route::middleware(['auth:sanctum'])
         Route::post('/create-report', [ReportController::class, 'store']);
         //Comments
         Route::post('/create-comment', [CommentController::class, 'store']);
-    });
+    }); 
