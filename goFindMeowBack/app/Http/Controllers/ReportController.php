@@ -37,7 +37,7 @@ class ReportController extends Controller
     {
 
         $request->validate([
-            'photo' => 'required|mimes:jpg,png,gif,jpeg,svg |max:2048',
+            'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg |max:2048',
         ]);
         $fileName = time().'.'.$request->file->extension();  
         $request->file->move(public_path('uploads'), $fileName);
