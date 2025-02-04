@@ -44,11 +44,11 @@ class ReportController extends Controller
  */
 
         $request->validate([
-            'aphoto' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
+            'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
         ]);
 
-        if ($request->hasFile('aphoto')) { // Itt az 'aphoto' mezőnév kell!
-            $file = $request->file('aphoto');
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
             $fileName = time() . '.' . $file->extension();
             $file->move(public_path('uploads'), $fileName);
 
