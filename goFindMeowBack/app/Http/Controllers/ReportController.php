@@ -72,9 +72,14 @@ class ReportController extends Controller
         ]);
 
 
+        if (Auth::check()) {
+            $creatorId = Auth::id();
+        } else {
+            return response()->json(['error' => 'No user logged in.'], 401);
+        }
+
         $report = Report::create([
-  /*           'report_id'=> $request-> report_id, */
-            'creator_id' => Auth::id(),
+            'creator_id' =>  $request-> creator_id,
             'status' => $request->status,
             'expiration_date' => $request-> expiration_date,
             'address' => $request->address,
