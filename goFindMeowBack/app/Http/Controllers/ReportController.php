@@ -6,6 +6,7 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -72,8 +73,8 @@ class ReportController extends Controller
 
 
         $report = Report::create([
-            'report_id'=> $request-> report_id,
-            'creator_id' =>$request -> Auth::id(),
+  /*           'report_id'=> $request-> report_id, */
+            'creator_id' => Auth::id(),
             'status' => $request->status,
             'expiration_date' => $request-> expiration_date,
             'address' => $request->address,
