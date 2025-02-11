@@ -130,3 +130,4 @@ Route::middleware(['auth:sanctum'])
         //Comments
         Route::post('/create-comment', [CommentController::class, 'store']);
     }); 
+    
