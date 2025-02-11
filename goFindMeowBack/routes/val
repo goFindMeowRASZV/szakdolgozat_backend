@@ -1,0 +1,5 @@
+Route::get('/get-sheltered-cat/{id}', [ShelteredCatController::class, 'show']);
+        Route::get('/get-sheltered-cat-color/{color}', [ShelteredCatController::class, 'show_color']);
+        Route::get('/get-sheltered-cat-pattern/{pattern}', [ShelteredCatController::class, 'show_pattern']);
+        Route::get('/get-sheltered-cat-status/{status}', [ShelteredCatController::class, 'show_status']);
+        Route::get('/get-sheltered-cat-chip_number/{chip_number}', [ShelteredCatController::class, 'show_chip_number']);
