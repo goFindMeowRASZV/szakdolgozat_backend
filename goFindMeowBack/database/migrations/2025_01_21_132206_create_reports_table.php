@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('creator_id')->references('id')->on('users')->default(0);
             $table->string('status',1);//Talált, Keresett, Látott, Menhely
             $table->timestamps();
-            $table->date('expiration_date');
+            $table->date('expiration_date')->nullable();
             $table->string('address',100);
             $table->float('latitude')->nullable();; //szelessegi_fok
             $table->float('longitude')->nullable();; //hosszusagi_fok
@@ -135,44 +135,7 @@ return new class extends Migration
             
         ]); 
 
-        Report::create([
-            'creator_id'=>  7,
-            'status' => 'L', //látott
-            'expiration_date' => '20250628',
-            'address' => 'Budapest, Károly krt. 11, 1075',
-            'latitude'=> 47.496639, 
-            'longitude' =>  19.057447 ,
-            'color' => 'vörös, fehér',
-            'pattern' => 'cirmos',
-            'other_identifying_marks' => 'jó vadász',
-            'needs_help'=> false,
-            'health_status' => null,
-            'photo' => '\public\uploads\cica3.jpg',
-            'chip_number' => null,
-            'circumstances' => null,
-            'number_of_individuals' => 1,
-            'disappearance_date' => null
-            
-        ]); 
-        Report::create([
-            'creator_id'=>  7,
-            'status' => 'L', //látott
-            'expiration_date' => '20250628',
-            'address' => 'Budapest, Károly krt. 11, 1075',
-            'latitude'=> 47.496639, 
-            'longitude' =>  19.057447 ,
-            'color' => 'szürke, fekete',
-            'pattern' => 'cirmos',
-            'other_identifying_marks' => 'jó vadász',
-            'needs_help'=> false,
-            'health_status' => null,
-            'photo' => '\public\uploads\cica4.jpg',
-            'chip_number' => null,
-            'circumstances' => null,
-            'number_of_individuals' => 1,
-            'disappearance_date' => null
-            
-        ]); 
+      
     }
 
     /**
