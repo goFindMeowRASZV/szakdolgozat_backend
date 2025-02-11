@@ -26,3 +26,9 @@ return new class extends Migration
         DB::unprepared('DROP TRIGGER IF EXISTS lejarati_datum_beallitas');
     }
 };
+
+
+
+
+
+
