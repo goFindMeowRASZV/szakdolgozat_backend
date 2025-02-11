@@ -79,8 +79,8 @@ class ReportController extends Controller
             $file = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
             $imageName = time() . '.' . $extension;
-            $file->move(public_path('kepek'), $imageName);
-            $imagePath = asset('kepek/' . $imageName);
+            $file->move(public_path('uploads'), $imageName);
+            $imagePath = url('uploads/' . $imageName);
         }
 
         // Adatok mentése az adatbázisba

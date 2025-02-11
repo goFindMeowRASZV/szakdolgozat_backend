@@ -43,13 +43,13 @@ return new class extends Migration
             'latitude'=> 47.505770,
             'longitude' => 19.069553,
             'color' => 'fekete, fehér',
-            'pattern' => 'foltos',
-            'other_identifying_marks' => 'le van vágva a jobb fülének a sarka',
+            'pattern' => 'cirmos',
+            'other_identifying_marks' => 'jó vadász',
             /* 'needs_help'=> false, */
             'health_status' => null,
-            'photo' => 'https://cdn12.picryl.com/photo/2016/12/31/cat-stray-kitty-animals-271146-1024.jpg',
+            'photo' => '\uploads\cica3.jpg',
             'chip_number' => null,
-            'circumstances' => 'félős nagyon',
+            'circumstances' => null,
             'number_of_individuals' => 1,
             'disappearance_date' => null
             
@@ -67,7 +67,7 @@ return new class extends Migration
             'other_identifying_marks' => 'hosszú szőrű',
            /*  'needs_help'=> false, */
             'health_status' => null,
-            'photo' => '\public\uploads\1738674438.jpg',
+            'photo' => '\uploads\1738674438.jpg',
             'chip_number' => null,
             'circumstances' => 'félős',
             'number_of_individuals' => 1,
@@ -87,7 +87,7 @@ return new class extends Migration
             'other_identifying_marks' => 'hosszú szőrű',
             /* 'needs_help'=> false, */
             'health_status' => null,
-            'photo' => '\public\uploads\caca5.jpg',
+            'photo' => '\uploads\caca5.jpg',
             'chip_number' => null,
             'circumstances' => 'játékos, bátor',
             'number_of_individuals' => 1,
@@ -107,7 +107,7 @@ return new class extends Migration
             'other_identifying_marks' => 'pár hónapos lehet',
            /*  'needs_help'=> false, */
             'health_status' => null,
-            'photo' => '\public\uploads\cica1.jpg',
+            'photo' => '\uploads\cica1.jpg',
             'chip_number' => null,
             'circumstances' => null,
             'number_of_individuals' => 1,
@@ -127,7 +127,7 @@ return new class extends Migration
             'other_identifying_marks' => 'jó vadász',
             /* 'needs_help'=> false, */
             'health_status' => null,
-            'photo' => '\public\uploads\cica2.jpg',
+            'photo' => '\uploads\cica2.jpg',
             'chip_number' => null,
             'circumstances' => null,
             'number_of_individuals' => 1,
