@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class ReportController extends Controller
 {
@@ -35,7 +37,7 @@ class ReportController extends Controller
         Report::find($id)->delete();
     }
 
-    public function store(Request $request): Response
+    public function store(Request $request): JsonResponse
     {
         // Ellenőrizzük, hogy a felhasználó be van-e jelentkezve
         if (!Auth::check()) {
@@ -48,10 +50,10 @@ class ReportController extends Controller
         $validatedData = $request->validate([
             'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
             'status' => 'required|string|max:1',
-            'expiration_date' => 'nullable|date',
-            'address' => 'required|string|max:100',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
+/*             'expiration_date' => 'nullable|date',
+ */            'address' => 'required|string|max:100',
+           /*  'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric', */
             'color' => 'required|array',
             'pattern' => 'required|array',
             'other_identifying_marks' => 'nullable|string|max:250',
@@ -63,8 +65,8 @@ class ReportController extends Controller
             'disappearance_date' => 'nullable|date'
         ]);
 
-        $validatedDate['expiration_date'] = $validatedDate['expiration_date'] ?? Carbon::now()->addDays(14);
-
+/*         $validatedDate['expiration_date'] = $validatedDate['expiration_date'] ?? Carbon::now()->addDays(14);
+ */
         /* // Ellenőrizzük a 'needs_help' mezőt, ha nincs, alapértelmezett értékként false-t adunk
         $needsHelp = $validatedData['needs_help'] ?? false;
      
@@ -87,10 +89,10 @@ class ReportController extends Controller
         Report::create([
             'creator_id' => $creatorId,  // Bejelentkezett felhasználó azonosítója
             'status' => $validatedData['status'],
-            'expiration_date' => $validatedDate['expiration_date'],
-            'address' => $validatedData['address'],
-            'latitude' => $validatedData['latitude'] ?? null,
-            'longitude' => $validatedData['longitude'] ?? null,
+/*             'expiration_date' => $validatedDate['expiration_date'],
+ */            'address' => $validatedData['address'],
+            /* 'latitude' => $validatedData['latitude'] ?? null,
+            'longitude' => $validatedData['longitude'] ?? null, */
             'color' => json_encode($validatedData['color']),
             'pattern' => json_encode($validatedData['pattern']),
             'other_identifying_marks' => $validatedData['other_identifying_marks'] ?? null,
@@ -105,6 +107,9 @@ class ReportController extends Controller
 
         return response()->json($request->all());
     }
+
+
+
     public function get_color($color)
     {
         $reports = DB::table('reports')
