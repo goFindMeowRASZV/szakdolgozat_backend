@@ -14,19 +14,19 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id('report_id');
-            $table->foreignId('creator_id')->references('id')->on('users');
+            $table->foreignId('creator_id')->references('id')->on('users')->default(0);
             $table->string('status',1);//Talált, Keresett, Látott, Menhely
             $table->timestamps();
             $table->date('expiration_date');
             $table->string('address',100);
-            $table->float('latitude'); //szelessegi_fok
-            $table->float('longitude'); //hosszusagi_fok
+            $table->float('latitude')->nullable();; //szelessegi_fok
+            $table->float('longitude')->nullable();; //hosszusagi_fok
             $table->json('color');
             $table->json('pattern');
             $table->string('other_identifying_marks',250)->nullable();
             $table->boolean('needs_help');
             $table->string('health_status', 250)->nullable();
-            $table->string('photo',500)->nullable();
+            $table->string('photo',2048)->nullable();
             $table->bigInteger('chip_number')->nullable();
             $table->string('circumstances',250)->nullable();
             $table->integer('number_of_individuals')->nullable()-> default(1);
@@ -50,6 +50,125 @@ return new class extends Migration
             'photo' => 'https://cdn12.picryl.com/photo/2016/12/31/cat-stray-kitty-animals-271146-1024.jpg',
             'chip_number' => null,
             'circumstances' => 'félős nagyon',
+            'number_of_individuals' => 1,
+            'disappearance_date' => null
+            
+        ]); 
+
+        Report::create([
+            'creator_id'=>  7,
+            'status' => 'L', //látott
+            'expiration_date' => '20250628',
+            'address' => '1147, Budapest, Baross utca 2',
+            'latitude'=> 47.455029,
+            'longitude' =>  19.230738,
+            'color' => 'vörös, fehér',
+            'pattern' => 'cirmos',
+            'other_identifying_marks' => 'hosszú szőrű',
+            'needs_help'=> false,
+            'health_status' => null,
+            'photo' => '\public\uploads\1738674438.jpg',
+            'chip_number' => null,
+            'circumstances' => 'félős',
+            'number_of_individuals' => 1,
+            'disappearance_date' => null
+            
+        ]); 
+
+        Report::create([
+            'creator_id'=>  7,
+            'status' => 'L', //látott
+            'expiration_date' => '20250628',
+            'address' => 'Pécel, Maglódi út, 2119',
+            'latitude'=> 47.463074,
+            'longitude' =>  19.346008,
+            'color' => 'szürke, fehér',
+            'pattern' => 'foltos',
+            'other_identifying_marks' => 'hosszú szőrű',
+            'needs_help'=> false,
+            'health_status' => null,
+            'photo' => '\public\uploads\caca5.jpg',
+            'chip_number' => null,
+            'circumstances' => 'játékos, bátor',
+            'number_of_individuals' => 1,
+            'disappearance_date' => null
+            
+        ]); 
+
+        Report::create([
+            'creator_id'=>  7,
+            'status' => 'L', //látott
+            'expiration_date' => '20250628',
+            'address' => 'Budapest, Rigó u. 6, 1085',
+            'latitude'=> 47.490510, 
+            'longitude' =>  19.072686,
+            'color' => 'fekete, fehér',
+            'pattern' => 'cirmos',
+            'other_identifying_marks' => 'pár hónapos lehet',
+            'needs_help'=> false,
+            'health_status' => null,
+            'photo' => '\public\uploads\cica1.jpg',
+            'chip_number' => null,
+            'circumstances' => null,
+            'number_of_individuals' => 1,
+            'disappearance_date' => null
+            
+        ]); 
+
+        Report::create([
+            'creator_id'=>  7,
+            'status' => 'L', //látott
+            'expiration_date' => '20250628',
+            'address' => 'Budapest, Rákóczi út 15, 1088',
+            'latitude'=> 47.495076, 
+            'longitude' =>  19.063371,
+            'color' => 'vörös, fehér',
+            'pattern' => 'cirmos',
+            'other_identifying_marks' => 'jó vadász',
+            'needs_help'=> false,
+            'health_status' => null,
+            'photo' => '\public\uploads\cica2.jpg',
+            'chip_number' => null,
+            'circumstances' => null,
+            'number_of_individuals' => 1,
+            'disappearance_date' => null
+            
+        ]); 
+
+        Report::create([
+            'creator_id'=>  7,
+            'status' => 'L', //látott
+            'expiration_date' => '20250628',
+            'address' => 'Budapest, Károly krt. 11, 1075',
+            'latitude'=> 47.496639, 
+            'longitude' =>  19.057447 ,
+            'color' => 'vörös, fehér',
+            'pattern' => 'cirmos',
+            'other_identifying_marks' => 'jó vadász',
+            'needs_help'=> false,
+            'health_status' => null,
+            'photo' => '\public\uploads\cica3.jpg',
+            'chip_number' => null,
+            'circumstances' => null,
+            'number_of_individuals' => 1,
+            'disappearance_date' => null
+            
+        ]); 
+        Report::create([
+            'creator_id'=>  7,
+            'status' => 'L', //látott
+            'expiration_date' => '20250628',
+            'address' => 'Budapest, Károly krt. 11, 1075',
+            'latitude'=> 47.496639, 
+            'longitude' =>  19.057447 ,
+            'color' => 'szürke, fekete',
+            'pattern' => 'cirmos',
+            'other_identifying_marks' => 'jó vadász',
+            'needs_help'=> false,
+            'health_status' => null,
+            'photo' => '\public\uploads\cica4.jpg',
+            'chip_number' => null,
+            'circumstances' => null,
             'number_of_individuals' => 1,
             'disappearance_date' => null
             
