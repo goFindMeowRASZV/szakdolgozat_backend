@@ -47,7 +47,7 @@ return new class extends Migration
             'other_identifying_marks' => 'hosszú szőrű',
             /*  'needs_help'=> false, */
             'health_status' => null,
-            'photo' => '\uploads\1738674438.jpg',
+            'photo' => 'http://localhost:8000/uploads/1738674438.jpg',
             'chip_number' => null,
             'circumstances' => 'félős',
             'number_of_individuals' => 1,
@@ -67,7 +67,7 @@ return new class extends Migration
             'other_identifying_marks' => 'hosszú szőrű',
             /* 'needs_help'=> false, */
             'health_status' => null,
-            'photo' => '\uploads\caca5.jpg',
+            'photo' => 'http://localhost:8000/uploads/caca5.jpg',
             'chip_number' => null,
             'circumstances' => 'játékos, bátor',
             'number_of_individuals' => 1,
@@ -87,7 +87,7 @@ return new class extends Migration
             'other_identifying_marks' => 'pár hónapos lehet',
             /*  'needs_help'=> false, */
             'health_status' => null,
-            'photo' => '\uploads\cica1.jpg',
+            'photo' => 'http://localhost:8000/uploads/cica1.jpg',
             'chip_number' => null,
             'circumstances' => null,
             'number_of_individuals' => 1,
@@ -107,7 +107,7 @@ return new class extends Migration
             'other_identifying_marks' => 'jó vadász',
             /* 'needs_help'=> false, */
             'health_status' => null,
-            'photo' => '\uploads\cica2.jpg',
+            'photo' => 'http://localhost:8000/uploads/cica2.jpg',
             'chip_number' => null,
             'circumstances' => null,
             'number_of_individuals' => 1,
