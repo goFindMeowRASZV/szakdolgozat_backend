@@ -122,7 +122,7 @@ Route::middleware(['auth:sanctum'])
         Route::get('/get-report-status/{status}', [ReportController::class, 'get_status']);
         Route::get('/get-report-address/{address}', [ReportController::class, 'get_address']);
         Route::get('/get-report-chip-number/{chip_number}', [ReportController::class, 'get_chip_number']);
-     
+        Route::ge('/get-reports-photo/{report}',[ReportController::class,'get_reports_photo']);
         
         
         Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);

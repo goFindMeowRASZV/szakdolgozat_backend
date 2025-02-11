@@ -24,7 +24,7 @@ return new class extends Migration
             $table->json('color');
             $table->json('pattern');
             $table->string('other_identifying_marks',250)->nullable();
-            $table->boolean('needs_help');
+            /* $table->boolean('needs_help')->nullable(); */
             $table->string('health_status', 250)->nullable();
             $table->string('photo',2048)->nullable();
             $table->bigInteger('chip_number')->nullable();
@@ -45,7 +45,7 @@ return new class extends Migration
             'color' => 'fekete, fehér',
             'pattern' => 'foltos',
             'other_identifying_marks' => 'le van vágva a jobb fülének a sarka',
-            'needs_help'=> false,
+            /* 'needs_help'=> false, */
             'health_status' => null,
             'photo' => 'https://cdn12.picryl.com/photo/2016/12/31/cat-stray-kitty-animals-271146-1024.jpg',
             'chip_number' => null,
@@ -56,7 +56,7 @@ return new class extends Migration
         ]); 
 
         Report::create([
-            'creator_id'=>  7,
+            'creator_id'=>  3,
             'status' => 'L', //látott
             'expiration_date' => '20250628',
             'address' => '1147, Budapest, Baross utca 2',
@@ -65,7 +65,7 @@ return new class extends Migration
             'color' => 'vörös, fehér',
             'pattern' => 'cirmos',
             'other_identifying_marks' => 'hosszú szőrű',
-            'needs_help'=> false,
+           /*  'needs_help'=> false, */
             'health_status' => null,
             'photo' => '\public\uploads\1738674438.jpg',
             'chip_number' => null,
@@ -76,7 +76,7 @@ return new class extends Migration
         ]); 
 
         Report::create([
-            'creator_id'=>  7,
+            'creator_id'=>  3,
             'status' => 'L', //látott
             'expiration_date' => '20250628',
             'address' => 'Pécel, Maglódi út, 2119',
@@ -85,7 +85,7 @@ return new class extends Migration
             'color' => 'szürke, fehér',
             'pattern' => 'foltos',
             'other_identifying_marks' => 'hosszú szőrű',
-            'needs_help'=> false,
+            /* 'needs_help'=> false, */
             'health_status' => null,
             'photo' => '\public\uploads\caca5.jpg',
             'chip_number' => null,
@@ -96,7 +96,7 @@ return new class extends Migration
         ]); 
 
         Report::create([
-            'creator_id'=>  7,
+            'creator_id'=>  3,
             'status' => 'L', //látott
             'expiration_date' => '20250628',
             'address' => 'Budapest, Rigó u. 6, 1085',
@@ -105,7 +105,7 @@ return new class extends Migration
             'color' => 'fekete, fehér',
             'pattern' => 'cirmos',
             'other_identifying_marks' => 'pár hónapos lehet',
-            'needs_help'=> false,
+           /*  'needs_help'=> false, */
             'health_status' => null,
             'photo' => '\public\uploads\cica1.jpg',
             'chip_number' => null,
@@ -116,7 +116,7 @@ return new class extends Migration
         ]); 
 
         Report::create([
-            'creator_id'=>  7,
+            'creator_id'=>  3,
             'status' => 'L', //látott
             'expiration_date' => '20250628',
             'address' => 'Budapest, Rákóczi út 15, 1088',
@@ -125,7 +125,7 @@ return new class extends Migration
             'color' => 'vörös, fehér',
             'pattern' => 'cirmos',
             'other_identifying_marks' => 'jó vadász',
-            'needs_help'=> false,
+            /* 'needs_help'=> false, */
             'health_status' => null,
             'photo' => '\public\uploads\cica2.jpg',
             'chip_number' => null,
