@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/users', [Controller::class, 'index']);
 Route::get('/get-reports', [ReportController::class, 'index']);
+Route::get('/get-sheltered-reports',[ReportController::class,'get_sheltered_reports']);
+Route::get('/get-sheltered-reports-date/{date1},{date2}',[ReportController::class,'get_sheltered_reports_date']);
+Route::get('/get-report-color/{color}', [ReportController::class, 'get_color']);
+Route::get('/get-report-pattern/{pattern}', [ReportController::class, 'get_pattern']);
+
+Route::get('/get-report-filter/{color},{pattern},{date1},{date2}', [ReportController::class, 'get_sheltered_reports_filter']);
 //Route::post('/create-report', [ReportController::class, 'store']);
 
 
@@ -124,10 +130,13 @@ Route::middleware(['auth:sanctum'])
         Route::get('/get-report-chip-number/{chip_number}', [ReportController::class, 'get_chip_number']);
         Route::get('/get-reports-photo/{report}',[ReportController::class,'get_reports_photo']);
         
-        
+        Route::get('/get-sheltered-reports',[ReportController::class,'get_sheltered_reports']);
         Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
         Route::post('/create-report', [ReportController::class, 'store']);
         //Comments
         Route::post('/create-comment', [CommentController::class, 'store']);
+
+        Route::post('/shelter-cat/{report_id}', [ReportController::class, 'shelterCat']);
+
     }); 
     

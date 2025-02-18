@@ -17,14 +17,12 @@ return new class extends Migration
             $table->foreignId('creator_id')->references('id')->on('users')->default(0);
             $table->string('status', 1); //Talált, Keresett, Látott, Menhely
             $table->timestamps();
-            $table->date('expiration_date')->nullable();
             $table->string('address', 100);
             /*   $table->float('latitude')->nullable();; //szelessegi_fok
             $table->float('longitude')->nullable();; //hosszusagi_fok */
             $table->json('color');
             $table->json('pattern');
             $table->string('other_identifying_marks', 250)->nullable();
-            /* $table->boolean('needs_help')->nullable(); */
             $table->string('health_status', 250)->nullable();
             $table->string('photo', 2048)->nullable();
             $table->bigInteger('chip_number')->nullable();
@@ -38,14 +36,12 @@ return new class extends Migration
         Report::create([
             'creator_id' =>  3,
             'status' => 'L', //látott
-            /* 'expiration_date' => '20250628', */
             'address' => '1147, Budapest, Baross utca 2',
             /*  'latitude'=> 47.455029,
             'longitude' =>  19.230738, */
-            'color' => 'vörös, fehér',
+            'color' => 'vörös',
             'pattern' => 'cirmos',
             'other_identifying_marks' => 'hosszú szőrű',
-            /*  'needs_help'=> false, */
             'health_status' => null,
             'photo' => 'http://localhost:8000/uploads/1738674438.jpg',
             'chip_number' => null,
