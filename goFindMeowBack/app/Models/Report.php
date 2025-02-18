@@ -13,14 +13,12 @@ class Report extends Model
     protected $fillable = [
         'creator_id',
         'status',
-        'expiration_date',
         'address',
-        'latitude',
-        'longitude',
+        /*  'latitude',
+        'longitude', */
         'color',
         'pattern',
         'other_identifying_marks',
-        'needs_help',
         'health_status',
         'photo',
         'chip_number',
@@ -33,4 +31,9 @@ class Report extends Model
         'color' => 'array',
         'pattern' => 'array',
     ];
+
+    public function shelteredCat()
+    {
+        return $this->hasOne(ShelteredCat::class, 'report_id');
+    }
 }

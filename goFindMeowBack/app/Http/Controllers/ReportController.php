@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
+use App\Models\ShelteredCat;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -50,14 +51,12 @@ class ReportController extends Controller
         $validatedData = $request->validate([
             'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
             'status' => 'required|string|max:1',
-/*             'expiration_date' => 'nullable|date',
- */            'address' => 'required|string|max:100',
-           /*  'latitude' => 'nullable|numeric',
+            'address' => 'required|string|max:100',
+            /*  'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric', */
             'color' => 'required|array',
             'pattern' => 'required|array',
             'other_identifying_marks' => 'nullable|string|max:250',
-            /* 'needs_help' => 'nullable|boolean', */
             'health_status' => 'nullable|string|max:250',
             'chip_number' => 'nullable|numeric',
             'circumstances' => 'nullable|string|max:250',
@@ -65,8 +64,8 @@ class ReportController extends Controller
             'disappearance_date' => 'nullable|date'
         ]);
 
-/*         $validatedDate['expiration_date'] = $validatedDate['expiration_date'] ?? Carbon::now()->addDays(14);
- */
+
+
         /* // Ellenőrizzük a 'needs_help' mezőt, ha nincs, alapértelmezett értékként false-t adunk
         $needsHelp = $validatedData['needs_help'] ?? false;
      
@@ -89,8 +88,7 @@ class ReportController extends Controller
         Report::create([
             'creator_id' => $creatorId,  // Bejelentkezett felhasználó azonosítója
             'status' => $validatedData['status'],
-/*             'expiration_date' => $validatedDate['expiration_date'],
- */            'address' => $validatedData['address'],
+            'address' => $validatedData['address'],
             /* 'latitude' => $validatedData['latitude'] ?? null,
             'longitude' => $validatedData['longitude'] ?? null, */
             'color' => json_encode($validatedData['color']),
@@ -149,32 +147,51 @@ class ReportController extends Controller
 
     public function get_sheltered_reports()
     {
-        $reports = DB::table('sheltered_cats as sc')
-            ->join('reports as r', 'sc.report_id', '=', 'r.id')
+        $reports = DB::table('reports as r')
+            ->join('sheltered_cats as sc', 'sc.report', '=', 'r.report_id')
             ->get();
         return $reports;
     }
 
 
-    public function get_sheltered_reports_color($color)
+    public function get_sheltered_reports_filter($color, $pattern, $date1, $date2)
     {
+        if ($color === null) $color = "*";
+        if ($pattern === null) $pattern = "*";
+        if ($date1 === null) $date1 = "2015-01-01";
+        if ($date2 === null) $date2 = date("Y-m-d");
+
         $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id')
+            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
             ->where('r.color', '=', $color)
+            ->where('r.pattern', '=', $pattern)
+            ->where('r.created_at', '>', $date1)
+            ->where('r.created_at', '<', $date2)
             ->get();
+
         return $reports;
     }
 
 
-    public function get_sheltered_reports_pattern($pattern)
+    /*  public function get_sheltered_reports_pattern($pattern)
     {
         $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id')
+            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
             ->where('r.pattern', '=', $pattern)
             ->get();
         return $reports;
     }
 
+    
+    public function get_sheltered_reports_date($date1, $date2){
+        $reports = DB::table('reports as r')
+            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id')
+            ->where('r.created_at', '>', $date1)
+            ->where('r.created_at', '<', $date2)
+            ->get();
+        return $reports;
+    }
+     */
 
     public function get_sheltered_reports_status($status)
     {
@@ -185,10 +202,11 @@ class ReportController extends Controller
         return $reports;
     }
 
+
     public function get_sheltered_reports_address($address)
     {
         $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id')
+            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
             ->where('r.address', '=', $address)
             ->get();
         return $reports;
@@ -197,7 +215,7 @@ class ReportController extends Controller
     public function get_sheltered_reports_chip_number($chip_number)
     {
         $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id')
+            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
             ->where('r.chip_number', '=', $chip_number)
             ->get();
         return $reports;
@@ -206,9 +224,37 @@ class ReportController extends Controller
     public function get_reports_photo($report)
     {
         $reports = DB::table('reports as r')
-           ->select('photo')
+            ->select('photo')
             ->where('r.report_id', '=', $report)
             ->get();
         return $reports;
     }
+
+
+    public function shelterCat($report_id)
+{
+    // Ellenőrizzük, hogy létezik-e ilyen report
+    $report = Report::find($report_id);
+    
+    if (!$report) {
+        return response()->json(['error' => 'Nincs ilyen bejelentés'], 404);
+    }
+
+    // Ellenőrizzük, hogy ez a report már nem került-e menhelyre
+    $existingShelteredCat = ShelteredCat::where('report_id', $report_id)->first();
+
+    if ($existingShelteredCat) {
+        return response()->json(['error' => 'Ez a macska már menhelyen van'], 400);
+    }
+
+    // Új menhelyi macska rekord létrehozása
+    $shelteredCat = ShelteredCat::create([
+        'report_id' => $report_id
+    ]);
+
+    return response()->json([
+        'message' => 'A macska menhelyre került!',
+        'sheltered_cat' => $shelteredCat
+    ], 201);
+}
 }

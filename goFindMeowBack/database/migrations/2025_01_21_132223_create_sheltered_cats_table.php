@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('status',1);//aktiv, örökbeadott, elhunyt
             $table->bigInteger('chip_number')->nullable();
             $table->string('breed');
-            $table->string('photo',500);
+         /*    $table->string('photo',500); */
         });
 
         
@@ -37,9 +37,9 @@ return new class extends Migration
             'medical_record' => 'napi 2x etetni, + napi 1x Neoxide fülcsepp',
             'status' => 'A',
             'chip_number' => 123456789112345,
-            'breed' => 'házi macska',
-            'photo' => 'https://cdn12.picryl.com/photo/2016/12/31/cat-stray-kitty-animals-271146-1024.jpg'
+            'breed' => 'házi macska'
         ]);
+
     }
 
     /**
