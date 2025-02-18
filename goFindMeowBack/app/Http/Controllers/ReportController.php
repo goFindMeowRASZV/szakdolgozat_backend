@@ -231,9 +231,9 @@ class ReportController extends Controller
     }
 
 
-    public function shelterCat($report_id)
+    public function sheltercat(Request $request)
 {
-    // Ellenőrizzük, hogy létezik-e ilyen report
+    /* // Ellenőrizzük, hogy létezik-e ilyen report
     $report = Report::find($report_id);
     
     if (!$report) {
@@ -246,10 +246,10 @@ class ReportController extends Controller
     if ($existingShelteredCat) {
         return response()->json(['error' => 'Ez a macska már menhelyen van'], 400);
     }
-
+ */
     // Új menhelyi macska rekord létrehozása
     $shelteredCat = ShelteredCat::create([
-        'report_id' => $report_id
+        'report_id' => $request->report_id
     ]);
 
     return response()->json([
