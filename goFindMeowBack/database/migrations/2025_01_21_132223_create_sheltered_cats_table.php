@@ -19,6 +19,11 @@ return new class extends Migration
             $table->foreignId('owner')->nullable()->references('id')->on('users');
             $table->timestamps();
             $table->date('adoption_date')->nullable();
+            $table->integer('kennel_number')->nullable();
+            $table->string('medical_record',200)->nullable();
+            $table->string('status',1)->nullable();//aktiv, örökbeadott, elhunyt
+            $table->bigInteger('chip_number')->nullable();
+            $table->string('breed')->nullable();
             $table->integer('kennel_number')->nullable();;
             $table->string('medical_record',200)->nullable();;
             $table->string('status',1)->nullable();;//aktiv, örökbeadott, elhunyt
