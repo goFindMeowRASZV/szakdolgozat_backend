@@ -24,12 +24,6 @@ return new class extends Migration
             $table->string('status',1)->nullable();//aktiv, örökbeadott, elhunyt
             $table->bigInteger('chip_number')->nullable();
             $table->string('breed')->nullable();
-            /* $table->integer('kennel_number')->nullable();;
-            $table->string('medical_record',200)->nullable();;
-            $table->string('status',1)->nullable();;//aktiv, örökbeadott, elhunyt
-            $table->bigInteger('chip_number')->nullable()->nullable();;
-            $table->string('breed')->nullable();; */
-         /*    $table->string('photo',500); */
         });
 
         
