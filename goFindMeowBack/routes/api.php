@@ -136,7 +136,8 @@ Route::middleware(['auth:sanctum'])
         //Comments
         Route::post('/create-comment', [CommentController::class, 'store']);
 
-        Route::post('/shelter-cat', [ReportController::class, 'shelter_cat']);
+/*         Route::post('/shelter-cat', [ReportController::class, 'shelter_cat']);
+ */        Route::post('/shelter-cat', [ReportController::class, 'store']);
 
     }); 
     
