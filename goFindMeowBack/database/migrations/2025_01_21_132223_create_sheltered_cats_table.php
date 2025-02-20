@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('adoption_date')->nullable();
             $table->integer('kennel_number')->nullable();
             $table->string('medical_record',200)->nullable();
-            $table->string('status',1)->nullable();//aktiv, örökbeadott, elhunyt
+            $table->string('s_status',1)->nullable();//aktiv, örökbeadott, elhunyt
             $table->bigInteger('chip_number')->nullable();
             $table->string('breed')->nullable();
         });
@@ -34,7 +34,7 @@ return new class extends Migration
             'adoption_date' => null,
             'kennel_number' => 100,
             'medical_record' => 'napi 2x etetni, + napi 1x Neoxide fülcsepp',
-            'status' => 'A',
+            's_status' => 'A',
             'chip_number' => 123456789112345,
             'breed' => 'házi macska'
         ]);

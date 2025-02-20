@@ -85,7 +85,7 @@ class ReportController extends Controller
         }
 
         // Adatok mentése az adatbázisba
-        Report::create([
+        $report = Report::create([
             'creator_id' => $creatorId,  // Bejelentkezett felhasználó azonosítója
             'status' => $validatedData['status'],
             'address' => $validatedData['address'],
@@ -103,7 +103,7 @@ class ReportController extends Controller
             'disappearance_date' => $validatedData['disappearance_date'] ?? null
         ]);
 
-        return response()->json($request->all());
+        return response()->json(['message' => 'Macska bejelentve', 'report' => $report], 201);
     }
 
 
@@ -264,7 +264,7 @@ class ReportController extends Controller
     }
  */
     // Új menhelyi macska rekord létrehozása
-    $shelteredCat = ShelteredCat::create([
+/*     $shelteredCat = ShelteredCat::create([
         'report_id' => $request->report_id
     ]);
 
@@ -272,5 +272,6 @@ class ReportController extends Controller
             'message' => 'A macska menhelyre került!',
             'sheltered_cat' => $shelteredCat
         ], 201);
-    }
+    } */
+}
 }

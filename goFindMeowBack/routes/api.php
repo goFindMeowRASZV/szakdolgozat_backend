@@ -8,6 +8,7 @@ use App\Http\Controllers\ShelteredCatController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Staff;
+use App\Models\ShelteredCat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -137,7 +138,7 @@ Route::middleware(['auth:sanctum'])
         Route::post('/create-comment', [CommentController::class, 'store']);
 
 /*         Route::post('/shelter-cat', [ReportController::class, 'shelter_cat']);
- */        Route::post('/shelter-cat', [ReportController::class, 'store']);
+ */        Route::post('/shelter-cat', [ShelteredCatController::class, 'store']);
 
     }); 
     

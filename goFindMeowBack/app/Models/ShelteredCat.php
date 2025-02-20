@@ -17,7 +17,7 @@ class ShelteredCat extends Model
         'adoption_date',
         'kennel_number',
         'medical_record',
-        'status',
+        's_status',
         'chip_number',
         'breed',
    /*      'photo' */
