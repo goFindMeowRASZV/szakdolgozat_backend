@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/users', [Controller::class, 'index']);
 Route::get('/get-reports', [ReportController::class, 'index']);
-Route::get('/get-sheltered-reports',[ReportController::class,'get_sheltered_reports']);
-Route::get('/get-sheltered-reports-date/{date1},{date2}',[ReportController::class,'get_sheltered_reports_date']);
+Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
+Route::get('/get-sheltered-reports-date/{date1},{date2}', [ReportController::class, 'get_sheltered_reports_date']);
 Route::get('/get-report-color/{color}', [ReportController::class, 'get_color']);
 Route::get('/get-report-pattern/{pattern}', [ReportController::class, 'get_pattern']);
 
@@ -57,7 +57,7 @@ Route::middleware(['auth:sanctum', Admin::class])
         Route::patch('/admin/patch-user/{id}', [UserController::class, 'update']);
         //Reports
 
-        
+
         Route::get('/admin/get-report/{id}', [ReportController::class, 'show']);
 
         Route::get('/admin/get-report-color/{color}', [ReportController::class, 'get_color']);
@@ -71,12 +71,12 @@ Route::middleware(['auth:sanctum', Admin::class])
         Route::patch('/admin/patch-report/{id}', [ReportController::class, 'update']);
 
         //menhelyi macskák report adatai
-        Route::get('/admin/get-sheltered-reports',[ReportController::class,'get_sheltered_reports']);
-        Route::get('/admin/get-sheltered-reports-color',[ReportController::class,'get_sheltered_reports_color']);
-        Route::get('/admin/get-sheltered-reports-pattern',[ReportController::class,'get_sheltered_reports_pattern']);
-        Route::get('/admin/get-sheltered-reports-status',[ReportController::class,'get_sheltered_reports_status']);
-        Route::get('/admin/get-sheltered-reports-address',[ReportController::class,'get_sheltered_reports_address']);
-        Route::get('/admin/get-sheltered-reports-chip-number',[ReportController::class,'get_sheltered_reports_chip_number']);
+        Route::get('/admin/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
+        Route::get('/admin/get-sheltered-reports-color', [ReportController::class, 'get_sheltered_reports_color']);
+        Route::get('/admin/get-sheltered-reports-pattern', [ReportController::class, 'get_sheltered_reports_pattern']);
+        Route::get('/admin/get-sheltered-reports-status', [ReportController::class, 'get_sheltered_reports_status']);
+        Route::get('/admin/get-sheltered-reports-address', [ReportController::class, 'get_sheltered_reports_address']);
+        Route::get('/admin/get-sheltered-reports-chip-number', [ReportController::class, 'get_sheltered_reports_chip_number']);
 
 
         //ShelteredCats
@@ -113,7 +113,7 @@ Route::middleware(['auth:sanctum', Staff::class])
         //Comments
         Route::post('/staff/create-comment', [CommentController::class, 'store']);
     });
- 
+
 //autentikált réteg->USER
 Route::middleware(['auth:sanctum'])
     ->group(function () {
@@ -129,16 +129,17 @@ Route::middleware(['auth:sanctum'])
         Route::get('/get-report-status/{status}', [ReportController::class, 'get_status']);
         Route::get('/get-report-address/{address}', [ReportController::class, 'get_address']);
         Route::get('/get-report-chip-number/{chip_number}', [ReportController::class, 'get_chip_number']);
-        Route::get('/get-reports-photo/{report}',[ReportController::class,'get_reports_photo']);
-        
-        Route::get('/get-sheltered-reports',[ReportController::class,'get_sheltered_reports']);
+        Route::get('/get-reports-photo/{report}', [ReportController::class, 'get_reports_photo']);
+
+        Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
         Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
         Route::post('/create-report', [ReportController::class, 'store']);
         //Comments
         Route::post('/create-comment', [CommentController::class, 'store']);
 
-/*         Route::post('/shelter-cat', [ReportController::class, 'shelter_cat']);
- */        Route::post('/shelter-cat', [ShelteredCatController::class, 'store']);
-
-    }); 
-    
+        /*         Route::post('/shelter-cat', [ReportController::class, 'shelter_cat']);
+ */
+        Route::post('/shelter-cat', [ShelteredCatController::class, 'store']);
+        Route::get('/api/get-sheltered-report-filter/${color},${pattern},${date1}, ${date2}', [ReportController::class, 'get_sheltered_reports_filter']);
+        Route::get('/api/get-report-filter/${color},${pattern},${date1}, ${date2}', [ReportController::class, 'get_reports_filter']);
+    });

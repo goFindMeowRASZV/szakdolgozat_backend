@@ -155,43 +155,61 @@ class ReportController extends Controller
 
 
     public function get_sheltered_reports_filter($color, $pattern, $date1, $date2)
-    {
-        if ($color === null) $color = "*";
-        if ($pattern === null) $pattern = "*";
-        if ($date1 === null) $date1 = "2015-01-01";
-        if ($date2 === null) $date2 = date("Y-m-d");
+{
+    // Ha a szín vagy minta nem lett kiválasztva, akkor ne szűrjünk rájuk
+    if ($color === "*" || $color === null) $color = null;
+    if ($pattern === "*" || $pattern === null) $pattern = null;
 
-        $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
-            ->where('r.color', '=', $color)
-            ->where('r.pattern', '=', $pattern)
-            ->where('r.created_at', '>', $date1)
-            ->where('r.created_at', '<', $date2)
-            ->get();
+    // Ha nincs megadva kezdő dátum, alapértelmezett érték
+    if ($date1 === null) $date1 = "2015-01-01"; // Alapértelmezett dátum
+    if ($date2 === null) $date2 = date("Y-m-d"); // Alapértelmezett dátum: ma
 
-        return $reports;
-    }
+    $reports = DB::table('reports as r')
+        ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
+        // Szín szűrés, ha van
+        ->when($color, function ($query) use ($color) {
+            return $query->where('r.color', 'like', '%' . $color . '%');
+        })
+        // Minta szűrés, ha van
+        ->when($pattern, function ($query) use ($pattern) {
+            return $query->where('r.pattern', 'like', '%' . $pattern . '%');
+        })
+        // Dátum szűrés
+        ->where('r.created_at', '>=', $date1)
+        ->where('r.created_at', '<=', $date2)
+        ->get();
+
+    return $reports->isEmpty() ? response()->json([]) : response()->json($reports);
+}
+
+public function get_reports_filter($color, $pattern, $date1, $date2)
+{
+    if ($color === "*" || $color === null) $color = null;
+    if ($pattern === "*" || $pattern === null) $pattern = null;
+
+    if ($date1 === null) $date1 = "2015-01-01";
+    if ($date2 === null) $date2 = date("Y-m-d");
+
+    $reports = DB::table('reports as r')
+        // Szín szűrés, ha van
+        ->when($color, function ($query) use ($color) {
+            return $query->where('r.color', 'like', '%' . $color . '%');
+        })
+        // Minta szűrés, ha van
+        ->when($pattern, function ($query) use ($pattern) {
+            return $query->where('r.pattern', 'like', '%' . $pattern . '%');
+        })
+        // Dátum szűrés
+        ->where('r.created_at', '>=', $date1)
+        ->where('r.created_at', '<=', $date2)
+        ->get();
+
+    return $reports->isEmpty() ? response()->json([]) : response()->json($reports);
+}
 
 
-    /*  public function get_sheltered_reports_pattern($pattern)
-    {
-        $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
-            ->where('r.pattern', '=', $pattern)
-            ->get();
-        return $reports;
-    }
 
-    
-    public function get_sheltered_reports_date($date1, $date2){
-        $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id')
-            ->where('r.created_at', '>', $date1)
-            ->where('r.created_at', '<', $date2)
-            ->get();
-        return $reports;
-    }
-     */
+
 
     public function get_sheltered_reports_status($status)
     {
