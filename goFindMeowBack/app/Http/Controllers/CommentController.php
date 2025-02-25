@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -33,7 +34,7 @@ class CommentController extends Controller
     }
 
 
-    public function store(Request $request): Response
+    public function store(Request $request)
     {
         //VALIDALAS MINDENHOVA!!!
         $request->validate([
@@ -49,5 +50,15 @@ class CommentController extends Controller
 
         $comment->save();
         return response()->noContent();
+    }
+
+    public function get_user_comments($userId)
+    {
+        $user = User::with('comments')  
+                    ->findOrFail($userId);
+
+
+        return response()->json($user->comments);
+    
     }
 }

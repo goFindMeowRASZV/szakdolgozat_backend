@@ -43,4 +43,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Report::class, 'creator_id');
     }
+
+    // User.php model
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
