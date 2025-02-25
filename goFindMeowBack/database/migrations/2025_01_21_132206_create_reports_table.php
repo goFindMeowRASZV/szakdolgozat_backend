@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('circumstances', 250)->nullable();
             $table->integer('number_of_individuals')->nullable()->default(1);
             $table->date('disappearance_date')->nullable();
+            $table->integer('activity')->default(1);
         });
 
 

@@ -18,7 +18,8 @@ class ReportController extends Controller
 
     public function index()
     {
-        return Report::all();
+
+        return Report::where('activity', 1)->get();
     }
 
     public function show(string $id)

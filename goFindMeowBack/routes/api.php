@@ -21,7 +21,8 @@ Route::get('/get-report-color/{color}', [ReportController::class, 'get_color']);
 Route::get('/get-report-pattern/{pattern}', [ReportController::class, 'get_pattern']);
 
 Route::get('/get-report-filter/{color},{pattern},{date1},{date2}', [ReportController::class, 'get_sheltered_reports_filter']);
-//Route::post('/create-report', [ReportController::class, 'store']);
+Route::post('/create-report', [ReportController::class, 'store']);
+Route::get('/api/get-sheltered-report-filter/${color},${pattern},${date1}, ${date2}', [ReportController::class, 'get_sheltered_reports_filter']);
 
 
 /* Admin:

@@ -1,7 +1,59 @@
 <?php
 
-test('example', function () {
-    $response = $this->get('/');
+namespace Tests\Feature;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+
+class ReportTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_get_sheltered_reports_filter()
+{
+    $user = User::where('email', 'admin@admin.hu')->first(); 
+
+    $response = $this->actingAs($user)->withHeaders([
+        'Accept' => 'application/json',
+        'Authorization' => 'csrf '
+    ])->get('/api/get-sheltered-report-filter/voros/cirmos/2024-01-01/2025-02-25');
 
     $response->assertStatus(200);
-});
+}
+    public function test_get_reports_filter()
+    {
+        $user = User::where('email', 'admin@admin.hu')->first(); 
+
+        $response = $this->actingAs($user)->withHeaders([
+        'Accept' => 'application/json',
+        'Authorization' => 'csrf '
+    ])->get('/api/get-report-filter/voros,cirmos,2024-01-01,2025-02-25');
+        $response->assertStatus(200);
+    }
+
+    public function test_create_report()
+    
+    {
+        $user = User::where('email', 'admin@admin.hu')->first(); 
+
+        $response = $this->actingAs($user)->post('/create-report', [
+        'creator_id'=> '3',
+        'status'=> 'K',
+        'address'=> 'Király u 96.',
+        'color'=> 'voros',
+        'pattern'=> 'cirmos',
+        'other_identifying_marks'=> 'gfvhgd',
+        'health_status'=> 'jo',
+        'photo'=> 'kep',
+        'chip_number'=> '123456789876543',
+        'circumstances' => 'valami',
+        'number_of_individuals' => '1',
+        'disappearance_date' => '2024-02-01',
+
+        ]);
+
+        $response->assertStatus(201);
+    }
+}
