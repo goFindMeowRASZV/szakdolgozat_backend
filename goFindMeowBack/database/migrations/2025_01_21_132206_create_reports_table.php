@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('address', 100);
             /*   $table->float('latitude')->nullable();; //szelessegi_fok
             $table->float('longitude')->nullable();; //hosszusagi_fok */
-            $table->json('color');
-            $table->json('pattern');
+            $table->string('color');
+            $table->string('pattern');
             $table->string('other_identifying_marks', 250)->nullable();
             $table->string('health_status', 250)->nullable();
             $table->string('photo', 2048)->nullable();
@@ -29,14 +29,14 @@ return new class extends Migration
             $table->string('circumstances', 250)->nullable();
             $table->integer('number_of_individuals')->nullable()->default(1);
             $table->date('disappearance_date')->nullable();
-            $table->integer('activity')->default(1);
+            $table->integer('activity')->default(1);// 1 aktiv, 0 nem aktiv
         });
 
 
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'L', //látott
+            'status' => 'M', //látott
             'address' => '1147, Budapest, Baross utca 2',
             /*  'latitude'=> 47.455029,
             'longitude' =>  19.230738, */
@@ -49,12 +49,12 @@ return new class extends Migration
             'circumstances' => 'félős',
             'number_of_individuals' => 1,
             'disappearance_date' => null
-
+            
         ]);
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'L', //látott
+            'status' => 'M', //látott
           /*   'expiration_date' => '20250628', */
             'address' => 'Pécel, Maglódi út, 2119',
             /* 'latitude'=> 47.463074,

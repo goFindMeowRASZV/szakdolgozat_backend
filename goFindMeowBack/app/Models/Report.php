@@ -26,11 +26,10 @@ class Report extends Model
         'number_of_individuals',
         'disappearance_date'
     ];
-
-    protected $casts = [
-        'color' => 'array',
-        'pattern' => 'array',
+    protected $attributes = [
+        'activity' => 1, // Alapértelmezett érték
     ];
+
 
     public function shelteredCat()
     {
