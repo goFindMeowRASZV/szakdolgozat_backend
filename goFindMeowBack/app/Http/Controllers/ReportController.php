@@ -54,8 +54,8 @@ class ReportController extends Controller
             'address' => 'required|string|max:100',
             /*  'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric', */
-            'color' => 'required|array',
-            'pattern' => 'required|array',
+            'color' => 'required|string',
+            'pattern' => 'required|string',
             'other_identifying_marks' => 'nullable|string|max:250',
             'health_status' => 'nullable|string|max:250',
             'chip_number' => 'nullable|numeric',
@@ -65,15 +65,6 @@ class ReportController extends Controller
         ]);
 
 
-
-        /* // Ellenőrizzük a 'needs_help' mezőt, ha nincs, alapértelmezett értékként false-t adunk
-        $needsHelp = $validatedData['needs_help'] ?? false;
-     
-        // Ha a needs_help mező 'true' vagy 'false' sztringként van, konvertáljuk logikai értékre
-        if (is_string($needsHelp)) {
-            $needsHelp = filter_var($needsHelp, FILTER_VALIDATE_BOOLEAN);
-        }
-      */
         // Fájlkezelés, ha van feltöltött kép
         $imagePath = null;
         if ($request->hasFile('photo')) {
@@ -91,8 +82,8 @@ class ReportController extends Controller
             'address' => $validatedData['address'],
             /* 'latitude' => $validatedData['latitude'] ?? null,
             'longitude' => $validatedData['longitude'] ?? null, */
-            'color' => json_encode($validatedData['color']),
-            'pattern' => json_encode($validatedData['pattern']),
+            'color' => $validatedData['color'],
+            'pattern' => $validatedData['pattern'],
             'other_identifying_marks' => $validatedData['other_identifying_marks'] ?? null,
             /*   'needs_help' => $needsHelp,  // Itt már logikai értéket tárolunk */
             'health_status' => $validatedData['health_status'] ?? null,
@@ -154,58 +145,54 @@ class ReportController extends Controller
     }
 
 
-    public function get_sheltered_reports_filter($color, $pattern, $date1, $date2)
-{
-    // Ha a szín vagy minta nem lett kiválasztva, akkor ne szűrjünk rájuk
-    if ($color === "*" || $color === null) $color = null;
-    if ($pattern === "*" || $pattern === null) $pattern = null;
+    public function get_sheltered_reports_filter($status, $color, $pattern)
+    {
+        $status = ($status === "*" || empty(trim($status))) ? null : trim($status);
+        $color = ($color === "*" || empty(trim($color))) ? null : trim($color);
+        $pattern = ($pattern === "*" || empty(trim($pattern))) ? null : trim($pattern);
 
-    // Ha nincs megadva kezdő dátum, alapértelmezett érték
-    if ($date1 === null) $date1 = "2015-01-01"; // Alapértelmezett dátum
-    if ($date2 === null) $date2 = date("Y-m-d"); // Alapértelmezett dátum: ma
 
-    $reports = DB::table('reports as r')
-        ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
-        // Szín szűrés, ha van
-        ->when($color, function ($query) use ($color) {
-            return $query->where('r.color', 'like', '%' . $color . '%');
-        })
-        // Minta szűrés, ha van
-        ->when($pattern, function ($query) use ($pattern) {
-            return $query->where('r.pattern', 'like', '%' . $pattern . '%');
-        })
-        // Dátum szűrés
-        ->where('r.created_at', '>=', $date1)
-        ->where('r.created_at', '<=', $date2)
-        ->get();
+        // Lekérdezés a megfelelő szűrők alkalmazásával
+        $reports = DB::table('reports as r')
+            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
+            ->when($status, function ($query) use ($status) {
+                return $query->where('r.status', 'LIKE', "%$status%");
+            })
+            ->when($color, function ($query) use ($color) {
+                return $query->where('r.color', 'LIKE', "%$color%");
+            })
+            ->when($pattern, function ($query) use ($pattern) {
+                return $query->where('r.pattern', 'LIKE', "%$pattern%");
+            })
 
-    return $reports->isEmpty() ? response()->json([]) : response()->json($reports);
-}
+            ->get();
 
-public function get_reports_filter($color, $pattern, $date1, $date2)
-{
-    if ($color === "*" || $color === null) $color = null;
-    if ($pattern === "*" || $pattern === null) $pattern = null;
+        return response()->json($reports);
+    }
 
-    if ($date1 === null) $date1 = "2015-01-01";
-    if ($date2 === null) $date2 = date("Y-m-d");
 
-    $reports = DB::table('reports as r')
-        // Szín szűrés, ha van
-        ->when($color, function ($query) use ($color) {
-            return $query->where('r.color', 'like', '%' . $color . '%');
-        })
-        // Minta szűrés, ha van
-        ->when($pattern, function ($query) use ($pattern) {
-            return $query->where('r.pattern', 'like', '%' . $pattern . '%');
-        })
-        // Dátum szűrés
-        ->where('r.created_at', '>=', $date1)
-        ->where('r.created_at', '<=', $date2)
-        ->get();
+    public function get_reports_filter($status, $color, $pattern)
+    {
+        $status = ($status === "*" || empty(trim($status))) ? null : trim($status);
+        $color = ($color === "*" || empty(trim($color))) ? null : trim($color);
+        $pattern = ($pattern === "*" || empty(trim($pattern))) ? null : trim($pattern);
 
-    return $reports->isEmpty() ? response()->json([]) : response()->json($reports);
-}
+
+        $reports = DB::table('reports as r')
+            ->when($status, function ($query) use ($status) {
+                return $query->where('r.status', 'LIKE', "%$status%");
+            })
+            ->when($color, function ($query) use ($color) {
+                return $query->where('r.color', 'LIKE', "%$color%");
+            })
+            ->when($pattern, function ($query) use ($pattern) {
+                return $query->where('r.pattern', 'LIKE', "%$pattern%");
+            })
+
+            ->get();
+
+        return response()->json($reports);
+    }
 
 
 
@@ -250,8 +237,8 @@ public function get_reports_filter($color, $pattern, $date1, $date2)
 
 
     public function sheltercat(Request $request)
-{
-    /* // Ellenőrizzük, hogy létezik-e ilyen report
+    {
+        /* // Ellenőrizzük, hogy létezik-e ilyen report
     $report = Report::find($report_id);
     
     if (!$report) {
@@ -281,8 +268,8 @@ public function get_reports_filter($color, $pattern, $date1, $date2)
         return response()->json(['error' => 'Ez a macska már menhelyen van'], 400);
     }
  */
-    // Új menhelyi macska rekord létrehozása
-/*     $shelteredCat = ShelteredCat::create([
+        // Új menhelyi macska rekord létrehozása
+        /*     $shelteredCat = ShelteredCat::create([
         'report_id' => $request->report_id
     ]);
 
@@ -291,5 +278,5 @@ public function get_reports_filter($color, $pattern, $date1, $date2)
             'sheltered_cat' => $shelteredCat
         ], 201);
     } */
-}
+    }
 }

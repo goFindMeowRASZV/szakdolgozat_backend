@@ -133,13 +133,14 @@ Route::middleware(['auth:sanctum'])
 
         Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
         Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
-        Route::post('/create-report', [ReportController::class, 'store']);
         //Comments
         Route::post('/create-comment', [CommentController::class, 'store']);
 
         /*         Route::post('/shelter-cat', [ReportController::class, 'shelter_cat']);
- */
+ */     
+        Route::post('/create-report', [ReportController::class, 'store']);
         Route::post('/shelter-cat', [ShelteredCatController::class, 'store']);
-        Route::get('/api/get-sheltered-report-filter/${color},${pattern},${date1}, ${date2}', [ReportController::class, 'get_sheltered_reports_filter']);
-        Route::get('/api/get-report-filter/${color},${pattern},${date1}, ${date2}', [ReportController::class, 'get_reports_filter']);
+        
+        Route::get('/get-sheltered-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
+        Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
     });
