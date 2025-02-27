@@ -18,7 +18,7 @@ class ReportController extends Controller
 
     public function index()
     {
-        return Report::all();
+        return Report::where('activity',1)->get();
     }
 
     public function show(string $id)
@@ -61,7 +61,8 @@ class ReportController extends Controller
             'chip_number' => 'nullable|numeric',
             'circumstances' => 'nullable|string|max:250',
             'number_of_individuals' => 'nullable|integer',
-            'disappearance_date' => 'nullable|date'
+            'disappearance_date' => 'nullable|date',
+            'activity' => 'required|integer'
         ]);
 
 
@@ -91,7 +92,8 @@ class ReportController extends Controller
             'chip_number' => $validatedData['chip_number'] ?? null,
             'circumstances' => $validatedData['circumstances'] ?? null,
             'number_of_individuals' => $validatedData['number_of_individuals'] ?? null,
-            'disappearance_date' => $validatedData['disappearance_date'] ?? null
+            'disappearance_date' => $validatedData['disappearance_date'] ?? null,
+            'activity' => $validatedData['activity']
         ]);
 
         return response()->json(['message' => 'Macska bejelentve', 'report' => $report], 201);
