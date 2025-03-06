@@ -52,8 +52,8 @@ class ReportController extends Controller
             'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
             'status' => 'required|string|max:1',
             'address' => 'required|string|max:100',
-            /*  'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric', */
+            'lat' => 'nullable|numeric',
+            'lon' => 'nullable|numeric',
             'color' => 'required|string',
             'pattern' => 'required|string',
             'other_identifying_marks' => 'nullable|string|max:250',
@@ -81,12 +81,11 @@ class ReportController extends Controller
             'creator_id' => $creatorId,  // Bejelentkezett felhasználó azonosítója
             'status' => $validatedData['status'],
             'address' => $validatedData['address'],
-            /* 'latitude' => $validatedData['latitude'] ?? null,
-            'longitude' => $validatedData['longitude'] ?? null, */
+            'lat' => $validatedData['lat'] ?? null,
+            'lon' => $validatedData['lon'] ?? null, 
             'color' => $validatedData['color'],
             'pattern' => $validatedData['pattern'],
             'other_identifying_marks' => $validatedData['other_identifying_marks'] ?? null,
-            /*   'needs_help' => $needsHelp,  // Itt már logikai értéket tárolunk */
             'health_status' => $validatedData['health_status'] ?? null,
             'photo' => $imagePath,
             'chip_number' => $validatedData['chip_number'] ?? null,
@@ -100,43 +99,6 @@ class ReportController extends Controller
     }
 
 
-
-    public function get_color($color)
-    {
-        $reports = DB::table('reports')
-            ->where('color', '=', $color)
-            ->get();
-        return $reports;
-    }
-
-    public function get_pattern($pattern)
-    {
-        $reports = DB::table('reports')
-            ->where('pattern', '=', $pattern)
-            ->get();
-        return $reports;
-    }
-    public function get_status($status)
-    {
-        $reports = DB::table('reports')
-            ->where('status', '=', $status)
-            ->get();
-        return $reports;
-    }
-    public function get_address($address)
-    {
-        $reports = DB::table('reports')
-            ->where('address', '=', $address)
-            ->get();
-        return $reports;
-    }
-    public function get_chip_number($chip_number)
-    {
-        $reports = DB::table('reports')
-            ->where('chip_number', '=', $chip_number)
-            ->get();
-        return $reports;
-    }
 
     public function get_sheltered_reports()
     {
