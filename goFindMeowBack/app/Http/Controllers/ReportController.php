@@ -18,7 +18,10 @@ class ReportController extends Controller
 
     public function index()
     {
-        return Report::where('activity',1)->get();
+        return Report::where('activity', 1)
+        ->whereIn('status', ['l', 'k', 't'])
+        ->get();
+    
     }
 
     public function show(string $id)
@@ -147,9 +150,8 @@ class ReportController extends Controller
     }
 
 
-    public function get_sheltered_reports_filter($status, $color, $pattern)
+    public function get_sheltered_reports_filter($color, $pattern)
     {
-        $status = ($status === "*" || empty(trim($status))) ? null : trim($status);
         $color = ($color === "*" || empty(trim($color))) ? null : trim($color);
         $pattern = ($pattern === "*" || empty(trim($pattern))) ? null : trim($pattern);
 
@@ -157,9 +159,7 @@ class ReportController extends Controller
         // Lekérdezés a megfelelő szűrők alkalmazásával
         $reports = DB::table('reports as r')
             ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
-            ->when($status, function ($query) use ($status) {
-                return $query->where('r.status', 'LIKE', "%$status%");
-            })
+            ->whereIn('r.status', ['m']) 
             ->when($color, function ($query) use ($color) {
                 return $query->where('r.color', 'LIKE', "%$color%");
             })
@@ -181,6 +181,7 @@ class ReportController extends Controller
 
 
         $reports = DB::table('reports as r')
+            ->whereIn('r.status', ['l', 'k', 't']) 
             ->when($status, function ($query) use ($status) {
                 return $query->where('r.status', 'LIKE', "%$status%");
             })
