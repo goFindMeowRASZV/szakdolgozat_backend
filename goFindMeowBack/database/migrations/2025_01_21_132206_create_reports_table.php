@@ -36,7 +36,7 @@ return new class extends Migration
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'M', //látott
+            'status' => 'm', //látott
             'address' => '1147, Budapest, Baross utca 2',
             'lat'=> 47.455029,
             'lon' =>  19.230738,
@@ -54,7 +54,7 @@ return new class extends Migration
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'M', //látott
+            'status' => 'm', //látott
           /*   'expiration_date' => '20250628', */
             'address' => 'Pécel, Maglódi út, 2119',
             'lat'=> 47.463074,
@@ -74,7 +74,7 @@ return new class extends Migration
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'L', //látott
+            'status' => 'l', //látott
             /* 'expiration_date' => '20250628', */
             'address' => 'Budapest, Rigó u. 6, 1085',
             'lat'=> 47.490510, 
@@ -94,7 +94,7 @@ return new class extends Migration
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'L', //látott
+            'status' => 'k', //látott
             /* 'expiration_date' => '20250628', */
             'address' => 'Budapest, Rákóczi út 15, 1088',
             'lat' => 47.495076,
