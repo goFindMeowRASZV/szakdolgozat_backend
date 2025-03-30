@@ -201,47 +201,21 @@ class ReportController extends Controller
     }
 
 
-    public function sheltercat(Request $request)
-    {
-        /* // Ellenőrizzük, hogy létezik-e ilyen report
-    $report = Report::find($report_id);
-    
-    if (!$report) {
-        return response()->json(['error' => 'Nincs ilyen bejelentés'], 404);
-    }
-    public function shelter_cat($report_id)
-    {
-        // Ellenőrizzük, hogy létezik-e ilyen report
-        $report = Report::find($report_id);
+    public function archiveReport($id)
+{
+    $report = Report::findOrFail($id);
+    $report->activity = 0; // Inaktívra állítás
+    $report->save();
 
-        if (!$report) {
-            return response()->json(['error' => 'Nincs ilyen bejelentés'], 404);
-        }
+    return response()->json(['message' => 'Bejelentés archiválva!']);
+}
 
-        // Ellenőrizzük, hogy ez a report már nem került-e menhelyre
-        $existingShelteredCat = ShelteredCat::where('report_id', $report_id)->first();
+public function updateReport(Request $request, $id)
+{
+    $report = Report::findOrFail($id);
+    $report->update($request->all()); // Minden mezőt frissít
+    return response()->json(['message' => 'Bejelentés frissítve!']);
+}
 
-        if ($existingShelteredCat) {
-            return response()->json(['error' => 'Ez a macska már menhelyen van'], 400);
-        }
 
-        // Új menhelyi macska rekord létrehozása
-        $shelteredCat = ShelteredCat::create([
-            'report_id' => $report_id
-        ]);
-    if ($existingShelteredCat) {
-        return response()->json(['error' => 'Ez a macska már menhelyen van'], 400);
-    }
- */
-        // Új menhelyi macska rekord létrehozása
-        /*     $shelteredCat = ShelteredCat::create([
-        'report_id' => $request->report_id
-    ]);
-
-        return response()->json([
-            'message' => 'A macska menhelyre került!',
-            'sheltered_cat' => $shelteredCat
-        ], 201);
-    } */
-    }
 }

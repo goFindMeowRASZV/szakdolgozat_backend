@@ -54,6 +54,10 @@ Route::middleware(['auth:sanctum', Admin::class])
         Route::get('/admin/get-report/{id}', [ReportController::class, 'show']);
         Route::delete('/admin/delete-report/{id}', [ReportController::class, 'destroy']);
         Route::post('/admin/create-report', [ReportController::class, 'store']);
+
+        Route::patch('/reports/{id}/archive', [ReportController::class, 'archiveReport']);
+        Route::put('/reports/{id}', [ReportController::class, 'updateReport']);
+
 /*         Route::patch('/admin/patch-report/{id}', [ReportController::class, 'update']);
  */
         //menhelyi macskák report adatai
@@ -83,6 +87,11 @@ Route::middleware(['auth:sanctum', Staff::class])
 
         Route::delete('/staff/delete-report/{id}', [ReportController::class, 'destroy']);
         Route::post('/staff/create-report', [ReportController::class, 'store']);
+
+        Route::patch('/reports/{id}/archive', [ReportController::class, 'archiveReport']);
+        Route::put('/reports/{id}', [ReportController::class, 'updateReport']);
+
+
 /*         Route::patch('/staff/patch-report/{id}', [ReportController::class, 'update']);
  */        //ShelteredCats
         Route::get('/staff/get-sheltered-cat/{id}', [ShelteredCatController::class, 'show']);
