@@ -57,6 +57,7 @@ Route::middleware(['auth:sanctum', Admin::class])
 
         Route::patch('/reports/{id}/archive', [ReportController::class, 'archiveReport']);
         Route::put('/reports/{id}', [ReportController::class, 'updateReport']);
+        Route::get('/get-reports-a-s', [ReportController::class, 'admin_staff_index']);
 
 /*         Route::patch('/admin/patch-report/{id}', [ReportController::class, 'update']);
  */
@@ -90,6 +91,7 @@ Route::middleware(['auth:sanctum', Staff::class])
 
         Route::patch('/reports/{id}/archive', [ReportController::class, 'archiveReport']);
         Route::put('/reports/{id}', [ReportController::class, 'updateReport']);
+        Route::get('/get-reports-a-s', [ReportController::class, 'admin_staff_index']);
 
 
 /*         Route::patch('/staff/patch-report/{id}', [ReportController::class, 'update']);

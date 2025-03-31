@@ -9,6 +9,6 @@ return [
     'encrypt' => false,
     'http_only' => true,
     'secure' => env('APP_ENV') === 'production', // Csak HTTPS-en küldhető, ha éles szerveren vagy
-    'same_site' => 'Strict', // Megakadályozza a CSRF támadásokat
+    'same_site' => 'lax',
 ];
 

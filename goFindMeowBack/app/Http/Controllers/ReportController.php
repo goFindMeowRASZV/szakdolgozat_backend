@@ -23,6 +23,12 @@ class ReportController extends Controller
         ->get();
     
     }
+    public function admin_staff_index()
+    {
+        return Report::where('status', ['l', 'k', 't'])
+        ->get();
+    
+    }
 
     public function show(string $id)
     {
