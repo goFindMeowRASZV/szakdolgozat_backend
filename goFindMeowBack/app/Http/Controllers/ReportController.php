@@ -18,11 +18,21 @@ class ReportController extends Controller
 
     public function index()
     {
-        return Report::where('activity', 1)
-        ->whereIn('status', ['l', 'k', 't'])
-        ->get();
-    
+        $user = Auth::user();
+        $role = $user->role;
+
+        $reports = Report::whereIn('status', ['l', 't', 'k'])
+            ->when(in_array($role, [0, 1]), function ($query) {
+                return $query;
+            })
+            ->when($role == 2, function ($query) {
+                return $query->where('activity', '1');
+            })
+            ->get();
+
+        return response()->json($reports);
     }
+
 
     public function show(string $id)
     {
@@ -85,7 +95,7 @@ class ReportController extends Controller
             'status' => $validatedData['status'],
             'address' => $validatedData['address'],
             'lat' => $validatedData['lat'] ?? null,
-            'lon' => $validatedData['lon'] ?? null, 
+            'lon' => $validatedData['lon'] ?? null,
             'color' => $validatedData['color'],
             'pattern' => $validatedData['pattern'],
             'other_identifying_marks' => $validatedData['other_identifying_marks'] ?? null,
@@ -121,7 +131,7 @@ class ReportController extends Controller
         // Lekérdezés a megfelelő szűrők alkalmazásával
         $reports = DB::table('reports as r')
             ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
-            ->whereIn('r.status', ['m']) 
+            ->whereIn('r.status', ['m'])
             ->when($color, function ($query) use ($color) {
                 return $query->where('r.color', 'LIKE', "%$color%");
             })
@@ -143,7 +153,7 @@ class ReportController extends Controller
 
 
         $reports = DB::table('reports as r')
-            ->whereIn('r.status', ['l', 'k', 't']) 
+            ->whereIn('r.status', ['l', 'k', 't'])
             ->when($status, function ($query) use ($status) {
                 return $query->where('r.status', 'LIKE', "%$status%");
             })
@@ -200,48 +210,17 @@ class ReportController extends Controller
         return $reports;
     }
 
-
-    public function sheltercat(Request $request)
+    public function archive($id)
     {
-        /* // Ellenőrizzük, hogy létezik-e ilyen report
-    $report = Report::find($report_id);
-    
-    if (!$report) {
-        return response()->json(['error' => 'Nincs ilyen bejelentés'], 404);
-    }
-    public function shelter_cat($report_id)
-    {
-        // Ellenőrizzük, hogy létezik-e ilyen report
-        $report = Report::find($report_id);
+        $report = Report::find($id);
 
         if (!$report) {
-            return response()->json(['error' => 'Nincs ilyen bejelentés'], 404);
+            return response()->json(['error' => 'Bejelentés nem található.'], 404);
         }
 
-        // Ellenőrizzük, hogy ez a report már nem került-e menhelyre
-        $existingShelteredCat = ShelteredCat::where('report_id', $report_id)->first();
+        $report->activity = 0;
+        $report->save();
 
-        if ($existingShelteredCat) {
-            return response()->json(['error' => 'Ez a macska már menhelyen van'], 400);
-        }
-
-        // Új menhelyi macska rekord létrehozása
-        $shelteredCat = ShelteredCat::create([
-            'report_id' => $report_id
-        ]);
-    if ($existingShelteredCat) {
-        return response()->json(['error' => 'Ez a macska már menhelyen van'], 400);
-    }
- */
-        // Új menhelyi macska rekord létrehozása
-        /*     $shelteredCat = ShelteredCat::create([
-        'report_id' => $request->report_id
-    ]);
-
-        return response()->json([
-            'message' => 'A macska menhelyre került!',
-            'sheltered_cat' => $shelteredCat
-        ], 201);
-    } */
+        return response()->json(['message' => 'Bejelentés archiválva.']);
     }
 }
