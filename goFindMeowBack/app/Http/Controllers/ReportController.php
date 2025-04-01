@@ -223,4 +223,5 @@ class ReportController extends Controller
 
         return response()->json(['message' => 'Bejelentés archiválva.']);
     }
+    //commit
 }
