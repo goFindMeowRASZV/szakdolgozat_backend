@@ -17,18 +17,18 @@ class ReportController extends Controller
 {
 
     public function index()
-    {
-        return Report::where('activity', 1)
+{
+    return Report::where('activity', 1)
         ->whereIn('status', ['l', 'k', 't'])
         ->get();
-    
-    }
-    public function admin_staff_index()
-    {
-        return Report::where('status', ['l', 'k', 't'])
+}
+
+public function admin_staff_index()
+{
+    return Report::whereIn('status', ['l', 'k', 't'])
         ->get();
-    
-    }
+}
+
 
     public function show(string $id)
     {
