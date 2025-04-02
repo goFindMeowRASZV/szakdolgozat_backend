@@ -14,8 +14,8 @@ class Report extends Model
         'creator_id',
         'status',
         'address',
-        /*  'latitude',
-        'longitude', */
+        'lat',
+        'lon',
         'color',
         'pattern',
         'other_identifying_marks',

@@ -18,8 +18,21 @@ class ReportController extends Controller
 
     public function index()
     {
-        return Report::where('activity',1)->get();
+        $user = Auth::user();
+        $role = $user->role;
+
+        $reports = Report::whereIn('status', ['l', 't', 'k'])
+            ->when(in_array($role, [0, 1]), function ($query) {
+                return $query;
+            })
+            ->when($role == 2, function ($query) {
+                return $query->where('activity', '1');
+            })
+            ->get();
+
+        return response()->json($reports);
     }
+
 
     public function show(string $id)
     {
@@ -52,8 +65,8 @@ class ReportController extends Controller
             'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
             'status' => 'required|string|max:1',
             'address' => 'required|string|max:100',
-            /*  'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric', */
+            'lat' => 'nullable|numeric',
+            'lon' => 'nullable|numeric',
             'color' => 'required|string',
             'pattern' => 'required|string',
             'other_identifying_marks' => 'nullable|string|max:250',
@@ -66,15 +79,6 @@ class ReportController extends Controller
         ]);
 
 
-
-        /* // Ellenőrizzük a 'needs_help' mezőt, ha nincs, alapértelmezett értékként false-t adunk
-        $needsHelp = $validatedData['needs_help'] ?? false;
-     
-        // Ha a needs_help mező 'true' vagy 'false' sztringként van, konvertáljuk logikai értékre
-        if (is_string($needsHelp)) {
-            $needsHelp = filter_var($needsHelp, FILTER_VALIDATE_BOOLEAN);
-        }
-      */
         // Fájlkezelés, ha van feltöltött kép
         $imagePath = null;
         if ($request->hasFile('photo')) {
@@ -90,12 +94,11 @@ class ReportController extends Controller
             'creator_id' => $creatorId,  // Bejelentkezett felhasználó azonosítója
             'status' => $validatedData['status'],
             'address' => $validatedData['address'],
-            /* 'latitude' => $validatedData['latitude'] ?? null,
-            'longitude' => $validatedData['longitude'] ?? null, */
-            'color' =>$validatedData['color'],
+            'lat' => $validatedData['lat'] ?? null,
+            'lon' => $validatedData['lon'] ?? null,
+            'color' => $validatedData['color'],
             'pattern' => $validatedData['pattern'],
             'other_identifying_marks' => $validatedData['other_identifying_marks'] ?? null,
-            /*   'needs_help' => $needsHelp,  // Itt már logikai értéket tárolunk */
             'health_status' => $validatedData['health_status'] ?? null,
             'photo' => $imagePath,
             'chip_number' => $validatedData['chip_number'] ?? null,
@@ -110,43 +113,6 @@ class ReportController extends Controller
 
 
 
-    public function get_color($color)
-    {
-        $reports = DB::table('reports')
-            ->where('color', '=', $color)
-            ->get();
-        return $reports;
-    }
-
-    public function get_pattern($pattern)
-    {
-        $reports = DB::table('reports')
-            ->where('pattern', '=', $pattern)
-            ->get();
-        return $reports;
-    }
-    public function get_status($status)
-    {
-        $reports = DB::table('reports')
-            ->where('status', '=', $status)
-            ->get();
-        return $reports;
-    }
-    public function get_address($address)
-    {
-        $reports = DB::table('reports')
-            ->where('address', '=', $address)
-            ->get();
-        return $reports;
-    }
-    public function get_chip_number($chip_number)
-    {
-        $reports = DB::table('reports')
-            ->where('chip_number', '=', $chip_number)
-            ->get();
-        return $reports;
-    }
-
     public function get_sheltered_reports()
     {
         $reports = DB::table('reports as r')
@@ -156,49 +122,56 @@ class ReportController extends Controller
     }
 
 
-    public function get_sheltered_reports_filter($color, $pattern, $date1, $date2)
+    public function get_sheltered_reports_filter($color, $pattern)
     {
-        $color = ($color === "*" || empty($color)) ? null : strtolower($color);
-        $pattern = ($pattern === "*" || empty($pattern)) ? null : strtolower($pattern);
-    
-        $date1 = empty($date1) ? "2015-01-01" : $date1;
-        $date2 = empty($date2) ? date("Y-m-d", strtotime($date2 . ' +1 day')) : $date2;
-    
+        $color = ($color === "*" || empty(trim($color))) ? null : trim($color);
+        $pattern = ($pattern === "*" || empty(trim($pattern))) ? null : trim($pattern);
+
+
+        // Lekérdezés a megfelelő szűrők alkalmazásával
         $reports = DB::table('reports as r')
             ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
+            ->whereIn('r.status', ['m'])
             ->when($color, function ($query) use ($color) {
-                return $query->whereRaw("LOWER(r.color) LIKE ?", ["%$color%"]);
+                return $query->where('r.color', 'LIKE', "%$color%");
             })
             ->when($pattern, function ($query) use ($pattern) {
-                return $query->whereRaw("LOWER(r.pattern) LIKE ?", ["%$pattern%"]);
+                return $query->where('r.pattern', 'LIKE', "%$pattern%");
             })
-            ->whereBetween('r.created_at', [$date1, $date2])
+
             ->get();
-    
+
         return response()->json($reports);
     }
-    
-    public function get_reports_filter($color, $pattern, $date1, $date2)
+
+
+    public function get_reports_filter($status, $color, $pattern)
     {
-        $color = ($color === "*" || empty($color)) ? null : strtolower($color);
-        $pattern = ($pattern === "*" || empty($pattern)) ? null : strtolower($pattern);
-    
-        $date1 = empty($date1) ? "2015-01-01" : $date1;
-        $date2 = empty($date2) ? date("Y-m-d", strtotime($date2 . ' +1 day')) : $date2;
-    
+        $status = ($status === "*" || empty(trim($status))) ? null : trim($status);
+        $color = ($color === "*" || empty(trim($color))) ? null : trim($color);
+        $pattern = ($pattern === "*" || empty(trim($pattern))) ? null : trim($pattern);
+
+
         $reports = DB::table('reports as r')
+            ->whereIn('r.status', ['l', 'k', 't'])
+            ->when($status, function ($query) use ($status) {
+                return $query->where('r.status', 'LIKE', "%$status%");
+            })
             ->when($color, function ($query) use ($color) {
-                return $query->whereRaw("LOWER(r.color) LIKE ?", ["%$color%"]);
+                return $query->where('r.color', 'LIKE', "%$color%");
             })
-           >when($pattern, function ($query) use ($pattern) {
-                return $query->whereRaw("LOWER(r.pattern) LIKE ?", ["%$pattern%"]);
+            ->when($pattern, function ($query) use ($pattern) {
+                return $query->where('r.pattern', 'LIKE', "%$pattern%");
             })
-            ->whereBetween('r.created_at', [$date1, $date2])
+
             ->get();
-            
-            return response()->json($reports);
+
+        return response()->json($reports);
     }
-    
+
+
+
+
 
     public function get_sheltered_reports_status($status)
     {
@@ -237,6 +210,18 @@ class ReportController extends Controller
         return $reports;
     }
 
+    public function archive($id)
+    {
+        $report = Report::find($id);
 
-    
+        if (!$report) {
+            return response()->json(['error' => 'Bejelentés nem található.'], 404);
+        }
+
+        $report->activity = 0;
+        $report->save();
+
+        return response()->json(['message' => 'Bejelentés archiválva.']);
+    }
+    //commit
 }

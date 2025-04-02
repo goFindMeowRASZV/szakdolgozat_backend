@@ -28,9 +28,12 @@ class ShelteredCatController extends Controller
             'chip_number' => 'nullable|numeric', // A chip szám opcionális, ha megadott, akkor szám kell.
             'breed' => 'nullable|string|max:100', // A fajta opcionális, ha megadott, akkor szöveg és max 100 karakter.
         ]);
+        
 
 
         $report = Report::where('report_id', $request->report)->first();
+        $report -> status ="m";
+        $report->save();
 
         // Ellenőrizzük, hogy a bejelentés már nincs-e befogva
         if (ShelteredCat::where('report', $request->report_id)->exists()) {
@@ -50,7 +53,7 @@ class ShelteredCatController extends Controller
             'breed' => $validatedData['breed'] ?? null, // Fajta, ha van
         ]);
 
-        return response()->json(['message' => 'Macska befogva.', 'shelterCat' => $shelteredCat], 201);
+        return response()->json(['message' => 'Macska befogva.', 'report' => $report], 201);
     }
 
     public function show(string $id)
