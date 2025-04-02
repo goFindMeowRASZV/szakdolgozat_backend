@@ -22,4 +22,13 @@ class Comment extends Model
         'content',
         'photo'
     ];
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user');
+}
+public function report()
+{
+    return $this->belongsTo(Report::class, 'report');
+}
+
 }

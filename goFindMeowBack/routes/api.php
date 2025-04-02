@@ -65,10 +65,10 @@ Route::middleware(['auth:sanctum', Admin::class])
         Route::post('/admin/create-sheltered-cat', [ShelteredCatController::class, 'store']);
 /*         Route::patch('/admin/patch-sheltered-cat/{id}', [ShelteredCatController::class, 'update']);
  */        //Comments
-        /* Route::get('/admin/get-comment/{id}', [CommentController::class, 'show']);
+        Route::get('/admin/get-comment/{id}', [CommentController::class, 'show']);
         Route::delete('/admin/delete-comment/{id}', [CommentController::class, 'destroy']);
         Route::post('/admin/create-comment', [CommentController::class, 'store']);
- */
+ 
 
         Route::get('/admin/get-user-comments/{user_id}',[CommentController::class,'show']);  //!!!
     });
@@ -121,6 +121,10 @@ Route::middleware(['auth:sanctum'])
         Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
         //Comments
         Route::post('/create-comment', [CommentController::class, 'store']);
+        Route::get('/get-comment/{id}', [CommentController::class, 'show']);
+        Route::delete('/delete-comment/{id}', [CommentController::class, 'destroy']);
+        Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
+
 
         /*         Route::post('/shelter-cat', [ReportController::class, 'shelter_cat']);
  */     Route::get('get-reports', [ReportController::class,'index']);
