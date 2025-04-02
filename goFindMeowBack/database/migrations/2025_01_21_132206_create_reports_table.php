@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('creator_id')->references('id')->on('users')->default(0);
             $table->string('status', 1); //Talált, Keresett, Látott, Menhely
             $table->timestamps();
-            $table->string('address', 100);
+            $table->string('address', 255);
             $table->float('lat')->nullable(); //szelessegi_fok
             $table->float('lon')->nullable(); //hosszusagi_fok */
             $table->string('color');

@@ -64,7 +64,7 @@ class ReportController extends Controller
         $validatedData = $request->validate([
             'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
             'status' => 'required|string|max:1',
-            'address' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
             'lat' => 'nullable|numeric',
             'lon' => 'nullable|numeric',
             'color' => 'required|string',
@@ -223,5 +223,17 @@ class ReportController extends Controller
 
         return response()->json(['message' => 'Bejelentés archiválva.']);
     }
+
+    public function get_map_reports()
+{
+    $reports = \App\Models\Report::whereNotNull('lat')
+        ->whereNotNull('lon')
+        ->where('activity', 1)
+        ->get();
+
+    return response()->json($reports);
+}
+
+    
     //commit
 }
