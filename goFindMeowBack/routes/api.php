@@ -44,6 +44,13 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
 Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
     ->post('/create-comment', [CommentController::class, 'store']);
 
+Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
+    ->get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
+    
+Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
+    ->get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
+
+
 
 // ------------------------------
 // ADMIN ROUTES
@@ -92,9 +99,6 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
 
     Route::post('/shelter-cat', [ShelteredCatController::class, 'store']);
-    Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
-
-    Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
 
     Route::get('/get-comment/{id}', [CommentController::class, 'show']);
     Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
