@@ -224,16 +224,17 @@ class ReportController extends Controller
         return response()->json(['message' => 'Bejelentés archiválva.']);
     }
 
+
     public function get_map_reports()
-{
-    $reports = \App\Models\Report::whereNotNull('lat')
-        ->whereNotNull('lon')
-        ->where('activity', 1)
-        ->get();
+    {
+        $reports = \App\Models\Report::whereNotNull('lat')
+            ->whereNotNull('lon')
+            ->where('activity', 1)
+            ->get();
 
-    return response()->json($reports);
-}
+        return response()->json($reports);
+    }
 
-    
+
     //commit
 }

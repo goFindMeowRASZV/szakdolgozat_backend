@@ -29,7 +29,9 @@ Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
     ]);
 });
 
-// ✅ Authenticated + role alapú útvonalak
+// ------------------------------
+// MINDEN BEJELENTKEZETT FELHASZNÁLÓ
+// ------------------------------
 Route::middleware(['auth:sanctum', 'role:admin,staff'])
     ->patch('/reports/{id}/archive', [ReportController::class, 'archive']);
 
@@ -38,6 +40,10 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
 
 Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
     ->get('/get-reports', [ReportController::class, 'index']);
+
+Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
+    ->post('/create-comment', [CommentController::class, 'store']);
+
 
 // ------------------------------
 // ADMIN ROUTES
@@ -92,7 +98,7 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
 
     Route::get('/get-comment/{id}', [CommentController::class, 'show']);
     Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
-    Route::post('/create-comment', [CommentController::class, 'store']);
+    //Route::post('/create-comment', [CommentController::class, 'store']);
 
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
     Route::put('/change-password', [UserController::class, 'changePassword']);
