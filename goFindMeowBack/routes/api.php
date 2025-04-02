@@ -107,7 +107,10 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
 
     // Comments
     Route::get('/get-comment/{id}', [CommentController::class, 'show']);
-    Route::delete('/delete-comment/{id}', [CommentController::class, 'destroy']);
     Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
     Route::post('/create-comment', [CommentController::class, 'store']);
+
+    //Profil
+    Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
+    Route::put('/change-password', [UserController::class, 'changePassword']);
 });
