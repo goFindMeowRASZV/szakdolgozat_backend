@@ -35,6 +35,11 @@ Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
 Route::middleware(['auth:sanctum', 'role:admin,staff'])
     ->patch('/reports/{id}/archive', [ReportController::class, 'archive']);
 
+
+Route::middleware(['auth:sanctum', 'role:admin,staff'])
+    ->get('/get-users', [UserController::class, 'index']);
+
+
 Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
     ->post('/create-report', [ReportController::class, 'store']);
 
@@ -52,11 +57,14 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
 
 
 
+
+    
 // ------------------------------
 // ADMIN ROUTES
 // ------------------------------
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::get('/admin/get-users', [UserController::class, 'index']);
+    Route::put('/admin/update-user/{id}', [UserController::class, 'update']);
+
     Route::get('/admin/get-user/{id}', [UserController::class, 'show']);
     Route::delete('/admin/delete-user/{id}', [UserController::class, 'destroy']);
 
