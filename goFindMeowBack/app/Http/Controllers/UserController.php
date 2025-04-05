@@ -96,5 +96,34 @@ class UserController extends Controller
     return response()->json(['message' => 'A jelszó sikeresen megváltozott.']);
 }
 
-    
-}
+
+
+public function createUser(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|string|min:8',
+        'role' => 'required|in:0,1,2',
+    ]);
+
+    $currentRole = $request->user()->role;
+
+    if (!in_array($currentRole, [0, 1])) {
+        return response()->json(['message' => 'Nincs jogosultság.'], 403);
+    }
+
+    // Staff nem hozhat létre admint vagy usert
+    if ($currentRole === 1 && $request->role !== 1) {
+        return response()->json(['message' => 'Staff csak staffot hozhat létre.'], 403);
+    }
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => $request->role,
+    ]);
+
+    return response()->json(['message' => 'Felhasználó létrehozva.', 'user' => $user], 201);
+}}

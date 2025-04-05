@@ -72,4 +72,36 @@ class ShelteredCatController extends Controller
     {
         ShelteredCat::find($id)->delete();
     }
+
+
+    public function updateShelteredCat(Request $request, $id)
+{
+    $cat = ShelteredCat::findOrFail($id);
+
+    $validated = $request->validate([
+        'owner' => 'nullable|exists:users,id',
+        'adoption_date' => 'nullable|date',
+        'kennel_number' => 'nullable|integer',
+        'medical_record' => 'nullable|string|max:200',
+        's_status' => 'nullable|string|in:a,e,d',
+        'chip_number' => 'nullable|numeric',
+        'breed' => 'nullable|string|max:100',
+        'photo' => 'nullable|mimes:jpg,png,jpeg,gif,svg|max:2048',
+    ]);
+
+    if ($request->hasFile('photo')) {
+        $path = $request->file('photo')->store('sheltered', 'public');
+        $validated['photo'] = '/storage/' . $path;
+    }
+
+    $cat->update($validated);
+    $cat->refresh(); // újratölti az adatbázisból a friss adatokat
+    return response()->json([
+        'message' => 'Bejelentés frissítve.',
+        'report' => $cat
+    ]);
+    
+}
+
+
 }
