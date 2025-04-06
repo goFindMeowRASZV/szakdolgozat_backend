@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdoptionRequestController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Controller;
@@ -106,4 +107,7 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
 
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
     Route::put('/change-password', [UserController::class, 'changePassword']);
+
+    Route::post('/orokbefogadas', [AdoptionRequestController::class, 'send']);
+
 });
