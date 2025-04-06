@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
+
 class ReportController extends Controller
 {
 
@@ -21,12 +22,14 @@ class ReportController extends Controller
         $user = Auth::user();
         $role = $user->role;
 
-        $reports = Report::whereIn('status', ['l', 't', 'k'])
-            ->when(in_array($role, [0, 1]), function ($query) {
-                return $query;
-            })
+        $reports = Report::when(in_array($role, [0, 1]), function ($query) {
+            // Admin és staff: minden státuszt lát, beleértve az "m"-et is
+            return $query->whereIn('status', ['l', 't', 'k', 'm']);
+        })
             ->when($role == 2, function ($query) {
-                return $query->where('activity', '1');
+                // User: csak l, t, k státuszt és aktívakat lát
+                return $query->whereIn('status', ['l', 't', 'k'])
+                    ->where('activity', '1');
             })
             ->get();
 
@@ -174,55 +177,75 @@ class ReportController extends Controller
 
 
     public function updateReport(Request $request, $id)
-{
-    $report = Report::findOrFail($id);
-
-    $validated = $request->validate([
-        'status' => 'nullable|string|max:1',
-        'color' => 'nullable|string|max:255',
-        'pattern' => 'nullable|string|max:255',
-        'other_identifying_marks' => 'nullable|string|max:250',
-        'health_status' => 'nullable|string|max:250',
-        'chip_number' => 'nullable|numeric',
-        'circumstances' => 'nullable|string|max:250',
-        'number_of_individuals' => 'nullable|integer',
-        'disappearance_date' => 'nullable|date',
-        'photo' => 'nullable|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        'activity' => 'nullable|integer',
-    ]);
-
-    if ($request->hasFile('photo')) {
-        $path = $request->file('photo')->store('reports', 'public');
-        $validated['photo'] = '/storage/' . $path;
-    }
-
-    $report->update($validated);
-
-    $report->refresh(); // újratölti az adatbázisból a friss adatokat
-    return response()->json([
-        'message' => 'Bejelentés frissítve.',
-        'report' => $report
-    ]);
-    
-}
-
-    
-
- 
-
-    
-    public function archive($id)
     {
-        $report = Report::find($id);
+        $report = Report::findOrFail($id);
 
-        if (!$report) {
-            return response()->json(['error' => 'Bejelentés nem található.'], 404);
+        $validated = $request->validate([
+            'status' => 'nullable|string|max:1',
+            'color' => 'nullable|string|max:255',
+            'pattern' => 'nullable|string|max:255',
+            'other_identifying_marks' => 'nullable|string|max:250',
+            'health_status' => 'nullable|string|max:250',
+            'chip_number' => 'nullable|numeric',
+            'circumstances' => 'nullable|string|max:250',
+            'number_of_individuals' => 'nullable|integer',
+            'disappearance_date' => 'nullable|date',
+            'photo' => 'nullable|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'activity' => 'nullable|integer',
+        ]);
+
+        if ($request->hasFile('photo')) {
+            $filename = time() . '.' . $request->file('photo')->getClientOriginalExtension();
+            $request->file('photo')->move(public_path('uploads'), $filename);
+            $validated['photo'] = '/uploads/' . $filename;
         }
 
-        $report->activity = 0;
-        $report->save();
+        $report->update($validated);
 
-        return response()->json(['message' => 'Bejelentés archiválva.']);
+        // Friss adat betöltése és visszaküldése
+        $report->refresh();
+        return response()->json([
+            'message' => 'Bejelentés frissítve.',
+            'report' => $report
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->input('q');
+
+        $user = Auth::user();
+        $role = $user->role;
+
+        $query = Report::query();
+
+        // Admin és staff minden státuszt lát
+        if (in_array($role, [0, 1])) {
+            $query->whereIn('status', ['l', 't', 'k', 'm']);
+        } else {
+            $query->whereIn('status', ['l', 't', 'k'])
+                ->where('activity', 1);
+        }
+
+        if ($keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('status', 'like', "%$keyword%")
+                    ->orWhere('address', 'like', "%$keyword%")
+                    ->orWhere('color', 'like', "%$keyword%")
+                    ->orWhere('pattern', 'like', "%$keyword%")
+                    ->orWhere('other_identifying_marks', 'like', "%$keyword%")
+                    ->orWhere('health_status', 'like', "%$keyword%")
+                    ->orWhere('chip_number', 'like', "%$keyword%")
+                    ->orWhere('circumstances', 'like', "%$keyword%")
+                    ->orWhere('number_of_individuals', 'like', "%$keyword%")
+                    ->orWhere('disappearance_date', 'like', "%$keyword%")
+                    ->orWhere('creator_id', 'like', "%$keyword%");
+            });
+        }
+
+        $results = $query->get();
+
+        return response()->json($results);
     }
 
 
