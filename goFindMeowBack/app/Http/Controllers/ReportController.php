@@ -173,43 +173,44 @@ class ReportController extends Controller
 
 
 
-    public function get_sheltered_reports_status($status)
-    {
-        $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.id', '=', 'sc.report_id')
-            ->where('r.status', '=', $status)
-            ->get();
-        return $reports;
+    public function updateReport(Request $request, $id)
+{
+    $report = Report::findOrFail($id);
+
+    $validated = $request->validate([
+        'status' => 'nullable|string|max:1',
+        'color' => 'nullable|string|max:255',
+        'pattern' => 'nullable|string|max:255',
+        'other_identifying_marks' => 'nullable|string|max:250',
+        'health_status' => 'nullable|string|max:250',
+        'chip_number' => 'nullable|numeric',
+        'circumstances' => 'nullable|string|max:250',
+        'number_of_individuals' => 'nullable|integer',
+        'disappearance_date' => 'nullable|date',
+        'photo' => 'nullable|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        'activity' => 'nullable|integer',
+    ]);
+
+    if ($request->hasFile('photo')) {
+        $path = $request->file('photo')->store('reports', 'public');
+        $validated['photo'] = '/storage/' . $path;
     }
 
+    $report->update($validated);
 
-    public function get_sheltered_reports_address($address)
-    {
-        $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
-            ->where('r.address', '=', $address)
-            ->get();
-        return $reports;
-    }
+    $report->refresh(); // újratölti az adatbázisból a friss adatokat
+    return response()->json([
+        'message' => 'Bejelentés frissítve.',
+        'report' => $report
+    ]);
+    
+}
 
-    public function get_sheltered_reports_chip_number($chip_number)
-    {
-        $reports = DB::table('reports as r')
-            ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
-            ->where('r.chip_number', '=', $chip_number)
-            ->get();
-        return $reports;
-    }
+    
 
-    public function get_reports_photo($report)
-    {
-        $reports = DB::table('reports as r')
-            ->select('photo')
-            ->where('r.report_id', '=', $report)
-            ->get();
-        return $reports;
-    }
+ 
 
+    
     public function archive($id)
     {
         $report = Report::find($id);

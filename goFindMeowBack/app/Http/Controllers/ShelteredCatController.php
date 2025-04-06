@@ -84,26 +84,34 @@ class ShelteredCatController extends Controller
         ShelteredCat::find($id)->delete();
     }
 
-    public function getShelteredCatsWithDetails()
-    {
-        $cats = DB::table('sheltered_cats')
-            ->join('reports', 'sheltered_cats.report', '=', 'reports.report_id')
-            ->select(
-                'sheltered_cats.cat_id as macska_id',
-                'sheltered_cats.rescuer as mento_id',
-                'sheltered_cats.report as bejelentes_id',
-                'sheltered_cats.owner as gazdi_id',
-                'reports.created_at as behozas_datum',
-                'sheltered_cats.adoption_date as kikerules_datum',
-                'sheltered_cats.kennel_number as kennelszam',
-                'sheltered_cats.medical_record as korlap',
-                'sheltered_cats.s_status as statusz',
-                'sheltered_cats.chip_number as chip_sz',
-                'sheltered_cats.breed as fajta',
-                'reports.photo as kep'
-            )
-            ->get();
+    public function updateShelteredCat(Request $request, $id)
+{
+    $cat = ShelteredCat::findOrFail($id);
 
-        return response()->json($cats);
+    $validated = $request->validate([
+        'owner' => 'nullable|exists:users,id',
+        'adoption_date' => 'nullable|date',
+        'kennel_number' => 'nullable|integer',
+        'medical_record' => 'nullable|string|max:200',
+        's_status' => 'nullable|string|in:a,e,d',
+        'chip_number' => 'nullable|numeric',
+        'breed' => 'nullable|string|max:100',
+        'photo' => 'nullable|mimes:jpg,png,jpeg,gif,svg|max:2048',
+    ]);
+
+    if ($request->hasFile('photo')) {
+        $path = $request->file('photo')->store('sheltered', 'public');
+        $validated['photo'] = '/storage/' . $path;
     }
+
+    $cat->update($validated);
+    $cat->refresh(); // újratölti az adatbázisból a friss adatokat
+    return response()->json([
+        'message' => 'Bejelentés frissítve.',
+        'report' => $cat
+    ]);
+    
+}
+
+
 }

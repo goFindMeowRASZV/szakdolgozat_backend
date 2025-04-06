@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Route;
 // 'role:user' = role 2
 // ------------------------------
 
-// ✅ Ezeket bárki elérheti:
+// Ezeket bárki elérheti:
 Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
 Route::get('/get-map-reports', [ReportController::class, 'get_map_reports']);
 
-// ✅ Autentikáció
+// Autentikáció
 Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
     return response()->json([
         'id' => $request->user()->id,
@@ -30,41 +30,33 @@ Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
     ]);
 });
 
-//staff + admin
-Route::middleware(['auth:sanctum', 'role:admin,staff'])
-    ->get('/sheltered-cats-with-details', [ShelteredCatController::class, 'getShelteredCatsWithDetails']);
-Route::middleware(['auth:sanctum', 'role:admin,staff'])
-    ->patch('/reports/{id}/archive', [ReportController::class, 'archive']);
-Route::middleware(['auth:sanctum', 'role:admin,staff'])
-    ->put('/update-sheltered-cat/{id}', [ShelteredCatController::class, 'update']);
 
 
-// ------------------------------
-// MINDEN BEJELENTKEZETT FELHASZNÁLÓ
-// ------------------------------
+// Admin + Staff 
+Route::middleware(['auth:sanctum', 'role:admin,staff'])->group(function () {
+    Route::patch('/reports/{id}/archive', [ReportController::class, 'archive']);
+    Route::get('/get-users', [UserController::class, 'index']);
+    Route::post('/create-user', [UserController::class, 'createUser']);
+    Route::put('/update-report/{id}', [ReportController::class, 'updateReport']);
+    Route::put('/update-sheltered-cat/{id}', [ShelteredCatController::class, 'updateShelteredCat']);
 
-Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
-    ->post('/create-report', [ReportController::class, 'store']);
-
-Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
-    ->get('/get-reports', [ReportController::class, 'index']);
-
-Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
-    ->post('/create-comment', [CommentController::class, 'store']);
-
-Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
-    ->get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
-    
-Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
-    ->get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
+});
 
 
+// Admin + Staff + User 
+Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () {
+    Route::post('/create-report', [ReportController::class, 'store']);
+    Route::get('/get-reports', [ReportController::class, 'index']);
+    Route::post('/create-comment', [CommentController::class, 'store']);
+    Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
+    Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
+});
 
-// ------------------------------
-// ADMIN ROUTES
-// ------------------------------
+// ADMIN 
+
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::get('/admin/get-users', [UserController::class, 'index']);
+    Route::put('/admin/update-user/{id}', [UserController::class, 'update']);
+
     Route::get('/admin/get-user/{id}', [UserController::class, 'show']);
     Route::delete('/admin/delete-user/{id}', [UserController::class, 'destroy']);
 
@@ -81,9 +73,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::delete('/admin/delete-comment/{id}', [CommentController::class, 'destroy']);
 });
 
-// ------------------------------
-// STAFF ROUTES
-// ------------------------------
+// STAFF 
 Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
     Route::get('/staff/get-report/{id}', [ReportController::class, 'show']);
     Route::delete('/staff/delete-report/{id}', [ReportController::class, 'destroy']);
@@ -96,11 +86,9 @@ Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
     Route::post('/staff/create-comment', [CommentController::class, 'store']);
 });
 
-// ------------------------------
-// AUTHENTICATED USER ROUTES
-// ------------------------------
+// AUTHENTICATED USER 
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
-    Route::get('/user', fn (Request $request) => $request->user());
+    Route::get('/user', fn(Request $request) => $request->user());
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
@@ -110,7 +98,6 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
 
     Route::get('/get-comment/{id}', [CommentController::class, 'show']);
     Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
-    //Route::post('/create-comment', [CommentController::class, 'store']);
 
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
     Route::put('/change-password', [UserController::class, 'changePassword']);
