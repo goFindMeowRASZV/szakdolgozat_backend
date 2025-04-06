@@ -50,6 +50,9 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
     Route::post('/create-comment', [CommentController::class, 'store']);
     Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
     Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
+    Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
+    Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
+    Route::put('/change-password', [UserController::class, 'changePassword']);
 });
 
 // ADMIN 
@@ -70,7 +73,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
     Route::get('/admin/get-user-comments/{user_id}', [CommentController::class, 'show']);
     Route::get('/admin/get-comment/{id}', [CommentController::class, 'show']);
-    Route::delete('/admin/delete-comment/{id}', [CommentController::class, 'destroy']);
+    Route::delete('/delete-comment/{report}/{user}', [CommentController::class, 'destroy']);
+
 });
 
 // STAFF 
@@ -97,10 +101,6 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::post('/shelter-cat', [ShelteredCatController::class, 'store']);
 
     Route::get('/get-comment/{id}', [CommentController::class, 'show']);
-    Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
-
-    Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
-    Route::put('/change-password', [UserController::class, 'changePassword']);
 
     Route::post('/orokbefogadas', [AdoptionRequestController::class, 'send']);
 
