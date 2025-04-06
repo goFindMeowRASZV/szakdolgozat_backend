@@ -30,11 +30,18 @@ Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
     ]);
 });
 
+//staff + admin
+Route::middleware(['auth:sanctum', 'role:admin,staff'])
+    ->get('/sheltered-cats-with-details', [ShelteredCatController::class, 'getShelteredCatsWithDetails']);
+Route::middleware(['auth:sanctum', 'role:admin,staff'])
+    ->patch('/reports/{id}/archive', [ReportController::class, 'archive']);
+Route::middleware(['auth:sanctum', 'role:admin,staff'])
+    ->put('/update-sheltered-cat/{id}', [ShelteredCatController::class, 'update']);
+
+
 // ------------------------------
 // MINDEN BEJELENTKEZETT FELHASZNÁLÓ
 // ------------------------------
-Route::middleware(['auth:sanctum', 'role:admin,staff'])
-    ->patch('/reports/{id}/archive', [ReportController::class, 'archive']);
 
 Route::middleware(['auth:sanctum', 'role:admin,staff,user'])
     ->post('/create-report', [ReportController::class, 'store']);
