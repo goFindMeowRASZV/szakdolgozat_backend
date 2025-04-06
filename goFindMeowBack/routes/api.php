@@ -27,6 +27,11 @@ Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
         'id' => $request->user()->id,
         'email' => $request->user()->email,
         'role' => $request->user()->role,
+        'name' => $request->user()->name,
+        'created_at' => $request->user()->created_at,
+        'profile_picture' => $request->user()->profile_picture
+            ? asset($request->user()->profile_picture)
+            : null,
     ]);
 });
 
