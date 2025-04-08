@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class CommentController extends Controller
@@ -27,10 +28,20 @@ class CommentController extends Controller
         $record->save();
     }
 
-    public function destroy(string $id)
-    {
-        Comment::find($id)->delete();
+    public function destroy($report, $user)
+{
+    $deleted = DB::table('comments')
+        ->where('report', $report)
+        ->where('user', $user)
+        ->delete();
+
+    if ($deleted) {
+        return response()->json(['message' => 'Komment törölve.']);
+    } else {
+        return response()->json(['message' => 'Nincs ilyen komment.'], 404);
     }
+}
+
 
     public function store(Request $request)
     {

@@ -28,11 +28,11 @@ class ShelteredCatController extends Controller
             'chip_number' => 'nullable|numeric', // A chip szám opcionális, ha megadott, akkor szám kell.
             'breed' => 'nullable|string|max:100', // A fajta opcionális, ha megadott, akkor szöveg és max 100 karakter.
         ]);
-        
+
 
 
         $report = Report::where('report_id', $request->report)->first();
-        $report -> status ="m";
+        $report->status = "m";
         $report->save();
 
         // Ellenőrizzük, hogy a bejelentés már nincs-e befogva
@@ -40,7 +40,7 @@ class ShelteredCatController extends Controller
             return response()->json(['message' => 'Ez a macska már be van fogva.'], 400);
         }
 
-    
+
         $shelteredCat = ShelteredCat::create([
             'rescuer' => Auth::id(), // Mentő személy ID-ja, amit a validáció biztosít
             'report' => $report->report_id, // Jelentés ID-ja, amit a validáció biztosít
@@ -63,16 +63,26 @@ class ShelteredCatController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $record = ShelteredCat::find($id);
-        $record->fill($request->all());
-        $record->save();
+        $validated = $request->validate([
+            'owner' => 'nullable|exists:users,id',
+            'adoption_date' => 'nullable|date',
+            'kennel_number' => 'nullable|integer',
+            'medical_record' => 'nullable|string|max:200',
+            'chip_number' => 'nullable|numeric',
+            'breed' => 'nullable|string|max:100',
+        ]);
+
+        $cat = ShelteredCat::findOrFail($id);
+        $cat->update($validated);
+
+        return response()->json(['message' => 'Macska adatai frissítve.']);
     }
+
 
     public function destroy(string $id)
     {
         ShelteredCat::find($id)->delete();
     }
-
 
     public function updateShelteredCat(Request $request, $id)
 {
