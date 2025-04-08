@@ -39,10 +39,9 @@ Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
 
 // Admin + Staff 
 Route::middleware(['auth:sanctum', 'role:admin,staff'])->group(function () {
-    Route::patch('/reports/{id}/archive', [ReportController::class, 'archive']);
     Route::get('/get-users', [UserController::class, 'index']);
     Route::post('/create-user', [UserController::class, 'createUser']);
-    Route::put('/update-report/{id}', [ReportController::class, 'updateReport']);
+    Route::put('/update-reports/{id}', [ReportController::class, 'updateReport']);
     Route::put('/update-sheltered-cat/{id}', [ShelteredCatController::class, 'updateShelteredCat']);
 
 });
@@ -55,6 +54,8 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
     Route::post('/create-comment', [CommentController::class, 'store']);
     Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
     Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
+    Route::get('/reports-search', [ReportController::class, 'search']);
+
     Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
     Route::put('/change-password', [UserController::class, 'changePassword']);

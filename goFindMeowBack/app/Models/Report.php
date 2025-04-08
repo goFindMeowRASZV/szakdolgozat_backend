@@ -24,7 +24,8 @@ class Report extends Model
         'chip_number',
         'circumstances',
         'number_of_individuals',
-        'disappearance_date'
+        'disappearance_date',
+        'activity'
     ];
     protected $attributes = [
         'activity' => 1, // Alapértelmezett érték
