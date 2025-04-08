@@ -67,7 +67,7 @@ class ReportController extends Controller
         $validatedData = $request->validate([
             'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
             'status' => 'required|string|max:1',
-            'address' => 'required|string|max:255',
+            'address' => 'required|string|max:500',
             'lat' => 'nullable|numeric',
             'lon' => 'nullable|numeric',
             'color' => 'required|string',
