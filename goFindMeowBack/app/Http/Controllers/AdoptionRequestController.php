@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ShelteredCat;
-use App\Models\User;
-use App\Models\Report;
+use App\Mail\OrokbefogadasErtesito;
+use App\Mail\OrokbefogadasStaffErtesito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-
 
 class AdoptionRequestController extends Controller
 {
@@ -22,57 +20,81 @@ class AdoptionRequestController extends Controller
             'report_photo' => 'nullable|string',
             'user_id' => 'required|integer|exists:users,id',
             'user_email' => 'required|email',
+            'user_name' => 'nullable|string',
         ]);
-        
+
         $message = $request->message;
+
         $report = [
             'report_id' => $request->report_report_id,
-            'color' => $request->report_color,
-            'pattern' => $request->report_pattern,
+            'color' => $request->report_color ?? 'ismeretlen',
+            'pattern' => $request->report_pattern ?? 'ismeretlen',
             'photo' => $request->report_photo,
         ];
+
         $user = [
             'id' => $request->user_id,
             'email' => $request->user_email,
+            'name' => $request->user_name ?? 'Kedves felhasználó',
         ];
-        
 
-        // ✅ Email visszaigazolás a felhasználónak
+        $catInfo = [
+            'ismerteto' => $request->input('report_jellemzes') ?? '-',
+            'egeszseg' => $request->input('report_health') ?? '-',
+            'chip' => $request->input('report_chip') ?? '-',
+            'korulmeny' => $request->input('report_conditions') ?? '-',
+            'datum' => $request->input('report_date') ?? '-',
+        ];
+
+        $userImageFilename = $user['profile_picture'] ?? null;
+
+        $defaultImagePath = public_path('kepek/user.jpg');
+
+        // Fájl elérési útja a storage-ból
+        $userImagePath = $userImageFilename
+            ? storage_path('app/public/profile_pictures/' . $userImageFilename)
+            : $defaultImagePath;
+
+        // Ha a megadott fájl nem létezik, állítsuk be a defaultot
+        if (!file_exists($userImagePath)) {
+            $userImagePath = $defaultImagePath;
+        }
+        $catImagePath = public_path('uploads/' . basename($report['photo']));
+        $headerImagePath = public_path('kepek/emailKep1.jpg');
+
+
+
         try {
-            Mail::raw(
-                "Kedves felhasználó!\n\nA(z) \"{$report['color']} / {$report['pattern']}\" cicára küldött örökbefogadási jelentkezésed sikeresen megérkezett. Munkatársaink hamarosan felveszik veled a kapcsolatot.\n\nKöszönjük!\nGoFindMeow",
-                fn ($mail) => $mail
-                    ->to('roszkopf.adel@gmail.com')
-                    ->subject('Örökbefogadási jelentkezés sikeres')
-                    ->from('info.gofindmeow@gmail.com', 'GoFindMeow')
-            );
+            //Mail::to($user['email'])->send(new OrokbefogadasErtesito(
+            Mail::to('viktoriaszalkai04@gmail.com')->send(new OrokbefogadasErtesito(
+                $user['name'],
+                $report['color'],
+                $report['pattern'],
+                $message,
+                $catImagePath,
+                $headerImagePath
+            ));
         } catch (\Throwable $e) {
-            Log::error('Nem sikerült elküldeni a felhasználónak az örökbefogadási emailt: ' . $e->getMessage());
+            Log::error('Nem sikerült elküldeni az örökbefogadási emailt: ' . $e->getMessage());
+            return response()->json(['error' => 'Nem sikerült elküldeni az emailt.'], 500);
         }
 
-        // ✅ Email értesítés staffnak
         try {
-            $staffBody = "Új örökbefogadási jelentkezés érkezett a következő cicára:\n\n"
-                . "Szín: {$report['color']}\n"
-                . "Minta: {$report['pattern']}\n"
-                . "Report ID: {$report['report_id']}\n\n"
-                . "Felhasználó ID: {$user['id']}\n"
-                . "Email: {$user['email']}\n\n"
-                . "Üzenet:\n{$message}";
-
-            Mail::raw(
-                $staffBody,
-                fn ($mail) => $mail
-                    ->to('roszkopf.adel@gmail.com')
-                    ->subject('Új örökbefogadási jelentkezés')
-                    ->from('info.gofindmeow@gmail.com', 'GoFindMeow')
-            );
+            Mail::to('viktoriaszalkai04@gmail.com')->send(new OrokbefogadasStaffErtesito(
+                $user['name'],
+                $user['email'],
+                $message,
+                $catImagePath,
+                $report['color'],
+                $report['pattern'],
+                $catInfo,
+                $report['report_id'],
+                $userImagePath
+            ));
         } catch (\Throwable $e) {
-            Log::error('Nem sikerült elküldeni a staffnak az örökbefogadási emailt: ' . $e->getMessage());
+            Log::error('Nem sikerült elküldeni az staff emailt: ' . $e->getMessage());
+            return response()->json(['error' => 'Nem sikerült elküldeni az emailt.'], 500);
         }
-
-        return response()->json([
-            'message' => 'Az örökbefogadási jelentkezést sikeresen elküldtük.',
-        ]);
+        return response()->json(['message' => 'Email sikeresen elküldve.']);
     }
 }
