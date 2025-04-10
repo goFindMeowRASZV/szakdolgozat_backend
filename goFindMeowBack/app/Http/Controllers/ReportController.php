@@ -23,8 +23,7 @@ class ReportController extends Controller
         $role = $user->role;
 
         $reports = Report::when(in_array($role, [0, 1]), function ($query) {
-            // Admin és staff: minden státuszt lát, beleértve az "m"-et is
-            return $query->whereIn('status', ['l', 't', 'k', 'm']);
+            return $query->whereIn('status', ['l', 't', 'k']);
         })
             ->when($role == 2, function ($query) {
                 // User: csak l, t, k státuszt és aktívakat lát
