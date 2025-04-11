@@ -65,8 +65,8 @@ class AdoptionRequestController extends Controller
 
 
         try {
-            //Mail::to($user['email'])->send(new OrokbefogadasErtesito(
-            Mail::to('viktoriaszalkai04@gmail.com')->send(new OrokbefogadasErtesito(
+            Mail::to($user['email'])->send(new OrokbefogadasErtesito(
+            //Mail::to('viktoriaszalkai04@gmail.com')->send(new OrokbefogadasErtesito(
                 $user['name'],
                 $report['color'],
                 $report['pattern'],
@@ -80,6 +80,7 @@ class AdoptionRequestController extends Controller
         }
 
         try {
+            //staff ugyfelszolgalat emailcime
             Mail::to('viktoriaszalkai04@gmail.com')->send(new OrokbefogadasStaffErtesito(
                 $user['name'],
                 $user['email'],
