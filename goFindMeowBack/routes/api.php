@@ -65,35 +65,16 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/admin/update-user/{id}', [UserController::class, 'update']);
-
-    Route::get('/admin/get-user/{id}', [UserController::class, 'show']);
     Route::delete('/admin/delete-user/{id}', [UserController::class, 'destroy']);
-
-    Route::get('/admin/get-report/{id}', [ReportController::class, 'show']);
-    Route::delete('/admin/delete-report/{id}', [ReportController::class, 'destroy']);
-    Route::post('/admin/create-report', [ReportController::class, 'store']);
-
-    Route::get('/admin/get-sheltered-cat/{id}', [ShelteredCatController::class, 'show']);
-    Route::delete('/admin/delete-sheltered-cat/{id}', [ShelteredCatController::class, 'destroy']);
-    Route::post('/admin/create-sheltered-cat', [ShelteredCatController::class, 'store']);
-
-    Route::get('/admin/get-user-comments/{user_id}', [CommentController::class, 'show']);
-    Route::get('/admin/get-comment/{id}', [CommentController::class, 'show']);
     Route::delete('/delete-comment/{report}/{user}', [CommentController::class, 'destroy']);
 
 });
 
 // STAFF 
 Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
-    Route::get('/staff/get-report/{id}', [ReportController::class, 'show']);
-    Route::delete('/staff/delete-report/{id}', [ReportController::class, 'destroy']);
-    Route::post('/staff/create-report', [ReportController::class, 'store']);
-
-    Route::get('/staff/get-sheltered-cat/{id}', [ShelteredCatController::class, 'show']);
     Route::delete('/staff/delete-sheltered-cat/{id}', [ShelteredCatController::class, 'destroy']);
     Route::post('/staff/create-sheltered-cat', [ShelteredCatController::class, 'store']);
 
-    Route::post('/staff/create-comment', [CommentController::class, 'store']);
 });
 
 // AUTHENTICATED USER 
@@ -101,12 +82,6 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/user', fn(Request $request) => $request->user());
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
-
-    Route::delete('/delete-report/{id}', [ReportController::class, 'destroy']);
-
-    Route::post('/shelter-cat', [ShelteredCatController::class, 'store']);
-
-    Route::get('/get-comment/{id}', [CommentController::class, 'show']);
 
     Route::post('/orokbefogadas', [AdoptionRequestController::class, 'send']);
 
