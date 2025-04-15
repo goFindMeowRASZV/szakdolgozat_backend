@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 // Ezeket bárki elérheti:
 Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
+
 Route::get('/get-map-reports', [ReportController::class, 'get_map_reports']);
 
 // Autentikáció
@@ -44,6 +45,7 @@ Route::middleware(['auth:sanctum', 'role:admin,staff'])->group(function () {
     Route::post('/create-user', [UserController::class, 'createUser']);
     Route::put('/update-reports/{id}', [ReportController::class, 'updateReport']);
     Route::put('/update-sheltered-cat/{id}', [ShelteredCatController::class, 'updateShelteredCat']);
+    Route::get('/get-adopted-sheltered-reports', [ReportController::class, 'get_adopted_cats']);
 
 });
 
@@ -76,6 +78,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
     Route::delete('/staff/delete-sheltered-cat/{id}', [ShelteredCatController::class, 'destroy']);
     Route::post('/staff/create-sheltered-cat', [ShelteredCatController::class, 'store']);
+    Route::patch('/sheltered-cats/{id}/orokbeadas', [ShelteredCatController::class, 'orokbeadas']);
 
 });
 

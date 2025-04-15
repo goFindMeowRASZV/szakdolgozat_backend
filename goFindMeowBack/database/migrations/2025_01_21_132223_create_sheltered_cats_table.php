@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('adoption_date')->nullable();
             $table->integer('kennel_number')->nullable();
             $table->string('medical_record',200)->nullable();
-            $table->string('s_status',1)->nullable();//aktiv, örökbeadott, elhunyt
+            $table->string('s_status',1)->nullable()->default("a");//aktiv, örökbeadott, elhunyt
             $table->bigInteger('chip_number')->nullable();
             $table->string('breed')->nullable();
         });

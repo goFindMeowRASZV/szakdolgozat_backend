@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\ShelteredCat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -144,6 +145,21 @@ public function search(Request $request)
     $results = $query->get();
 
     return response()->json($results);
+}
+public function orokbeadas(Request $request, $id)
+{
+    $cat = ShelteredCat::findOrFail($id);
+
+    // Email alapján keresünk user-t
+    $user = User::where('email', $request->input('owner_email'))->firstOrFail();
+
+    $cat->s_status = 'o';
+    $cat->adoption_date = $request->input('adoption_date');
+    $cat->owner = $user->id;
+
+    $cat->save();
+
+    return response()->json(['message' => 'Örökbeadás sikeres']);
 }
 
 

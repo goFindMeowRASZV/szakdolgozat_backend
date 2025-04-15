@@ -119,9 +119,21 @@ class ReportController extends Controller
     {
         $reports = DB::table('reports as r')
             ->join('sheltered_cats as sc', 'sc.report', '=', 'r.report_id')
+            ->whereIn(DB::raw('LOWER(sc.s_status)'), ['a', 'e']) // kisbetűs összehasonlítás
             ->get();
+    
         return $reports;
     }
+    public function get_adopted_cats()
+    {
+        $reports = DB::table('reports as r')
+            ->join('sheltered_cats as sc', 'sc.report', '=', 'r.report_id')
+            ->where(DB::raw('LOWER(sc.s_status)'), 'o') // csak az 'o' státuszú cicák
+            ->get();
+    
+        return $reports;
+    }
+        
 
 
     public function get_sheltered_reports_filter($color, $pattern)
