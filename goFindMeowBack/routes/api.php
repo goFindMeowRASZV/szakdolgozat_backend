@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShelteredCatController;
 use App\Http\Controllers\UserController;
+use App\Models\ShelteredCat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,7 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
     Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
     Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
     Route::get('/reports-search', [ReportController::class, 'search']);
+    Route::get('/sheltered-reports-search', [ShelteredCatController::class, 'search']);
 
     Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);

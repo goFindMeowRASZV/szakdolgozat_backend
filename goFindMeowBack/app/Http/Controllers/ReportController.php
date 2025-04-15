@@ -55,7 +55,7 @@ class ReportController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        // Ellenőrizzük, hogy a felhasználó be van-e jelentkezve
+        // Autentikált?
         if (!Auth::check()) {
             return response()->json(['error' => 'No user logged in.'], 401);
         }
@@ -93,7 +93,7 @@ class ReportController extends Controller
 
         // Adatok mentése az adatbázisba
         $report = Report::create([
-            'creator_id' => $creatorId,  // Bejelentkezett felhasználó azonosítója
+            'creator_id' => $creatorId,  
             'status' => $validatedData['status'],
             'address' => $validatedData['address'],
             'lat' => $validatedData['lat'] ?? null,
