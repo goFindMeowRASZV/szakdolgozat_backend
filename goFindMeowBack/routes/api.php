@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 // Ezeket bárki elérheti:
 Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
 Route::get('/get-map-reports', [ReportController::class, 'get_map_reports']);
+Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
 
 // Autentikáció
 Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
@@ -56,7 +57,6 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
     Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
     Route::get('/reports-search', [ReportController::class, 'search']);
 
-    Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
     Route::put('/change-password', [UserController::class, 'changePassword']);
 });

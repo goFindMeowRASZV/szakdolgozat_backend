@@ -24,7 +24,7 @@ return new class extends Migration
             'report' => 1,
             'user' => 4,
             'content' => 'A környéken láttam egy ehhez hasonló macskát, lehet, hogy ő az?',
-            'photo' => 'https://t4.ftcdn.net/jpg/07/94/18/55/360_F_794185583_OrEtKCqtXvdDDiJL0TUySbAZnk9ee2If.jpg'
+            'photo' => '/kepek/commentKep.jpg'
         ]);
     }
 

@@ -32,7 +32,7 @@ return new class extends Migration
             'email'=> 'admin@admin.hu',
             'password'=> Hash::make('admin1234'),
             'phone_number'=> '12345677876',
-            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'profile_picture'=>'/kepek/user.jpg',
             'role'=> 0
         ]);
 
@@ -41,7 +41,7 @@ return new class extends Migration
             'email'=> 'staff@staff.hu',
             'password'=> Hash::make('staff1234'),
             'phone_number'=> '12345677877',
-            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'profile_picture'=>'/kepek/user.jpg',
             'role'=> 1
         ]);
 
@@ -50,7 +50,7 @@ return new class extends Migration
             'email'=> 'user@user.hu',
             'password'=> Hash::make('user1234'),
             'phone_number'=> '12345677878',
-            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'profile_picture'=>'/kepek/user.jpg',
             'role'=> 2
         ]);
 
@@ -60,7 +60,7 @@ return new class extends Migration
             'email'=> 'user2@user2.hu',
             'password'=> Hash::make('user21234'),
             'phone_number'=> '12345677879',
-            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'profile_picture'=>'/kepek/user.jpg',
             'role'=> 2
         ]);
         User::create([
@@ -68,7 +68,7 @@ return new class extends Migration
             'email'=> 'user3@user3.hu',
             'password'=> Hash::make('user31234'),
             'phone_number'=> '12345677879',
-            'profile_picture'=>'https://i0.wp.com/imagineab.se/wp-content/uploads/2017/11/human-icon.png?fit=750%2C750&ssl=1',
+            'profile_picture'=>'/kepek/user.jpg',
             'role'=> 2
         ]);
  
