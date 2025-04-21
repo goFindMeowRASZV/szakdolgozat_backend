@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\ShelteredCat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -112,6 +113,55 @@ class ShelteredCatController extends Controller
     ]);
     
 }
+public function search(Request $request)
+{
+    $keyword = $request->input('q');
+    $query = DB::table('sheltered_cats')
+        ->join('reports', 'sheltered_cats.report', '=', 'reports.report_id')
+        ->select('sheltered_cats.*', 'reports.status', 'reports.address', 'reports.color', 'reports.pattern', 'reports.other_identifying_marks', 'reports.health_status','reports.photo', 'reports.circumstances', 'reports.chip_number as report_chip', 'reports.number_of_individuals', 'reports.disappearance_date', 'reports.creator_id');
+
+
+    // Keresés
+    if ($keyword) {
+        $query->where(function ($q) use ($keyword) {
+            $q->where('sheltered_cats.kennel_number', 'like', "%$keyword%")
+              ->orWhere('sheltered_cats.medical_record', 'like', "%$keyword%")
+              ->orWhere('sheltered_cats.s_status', 'like', "%$keyword%")
+              ->orWhere('sheltered_cats.chip_number', 'like', "%$keyword%")
+              ->orWhere('sheltered_cats.breed', 'like', "%$keyword%")
+              ->orWhere('reports.status', 'like', "%$keyword%")
+              ->orWhere('reports.address', 'like', "%$keyword%")
+              ->orWhere('reports.color', 'like', "%$keyword%")
+              ->orWhere('reports.pattern', 'like', "%$keyword%")
+              ->orWhere('reports.other_identifying_marks', 'like', "%$keyword%")
+              ->orWhere('reports.health_status', 'like', "%$keyword%")
+              ->orWhere('reports.circumstances', 'like', "%$keyword%")
+              ->orWhere('reports.number_of_individuals', 'like', "%$keyword%")
+              ->orWhere('reports.disappearance_date', 'like', "%$keyword%")
+              ->orWhere('reports.creator_id', 'like', "%$keyword%");
+        });
+    }
+
+    $results = $query->get();
+
+    return response()->json($results);
+}
+public function orokbeadas(Request $request, $id)
+{
+    $cat = ShelteredCat::findOrFail($id);
+
+    // Email alapján keresünk user-t
+    $user = User::where('email', $request->input('owner_email'))->firstOrFail();
+
+    $cat->s_status = 'o';
+    $cat->adoption_date = $request->input('adoption_date');
+    $cat->owner = $user->id;
+
+    $cat->save();
+
+    return response()->json(['message' => 'Örökbeadás sikeres']);
+}
+
 
 
 }

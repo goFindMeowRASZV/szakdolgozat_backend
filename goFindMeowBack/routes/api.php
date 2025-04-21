@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShelteredCatController;
 use App\Http\Controllers\UserController;
+use App\Models\ShelteredCat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 // Ezeket bárki elérheti:
 Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
+
 Route::get('/get-map-reports', [ReportController::class, 'get_map_reports']);
 Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
 
@@ -44,6 +46,7 @@ Route::middleware(['auth:sanctum', 'role:admin,staff'])->group(function () {
     Route::post('/create-user', [UserController::class, 'createUser']);
     Route::put('/update-reports/{id}', [ReportController::class, 'updateReport']);
     Route::put('/update-sheltered-cat/{id}', [ShelteredCatController::class, 'updateShelteredCat']);
+    Route::get('/get-adopted-sheltered-reports', [ReportController::class, 'get_adopted_cats']);
 
 });
 
@@ -56,6 +59,7 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
     Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
     Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
     Route::get('/reports-search', [ReportController::class, 'search']);
+    Route::get('/sheltered-reports-search', [ShelteredCatController::class, 'search']);
 
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
     Route::put('/change-password', [UserController::class, 'changePassword']);
@@ -74,6 +78,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
     Route::delete('/staff/delete-sheltered-cat/{id}', [ShelteredCatController::class, 'destroy']);
     Route::post('/staff/create-sheltered-cat', [ShelteredCatController::class, 'store']);
+    Route::patch('/sheltered-cats/{id}/orokbeadas', [ShelteredCatController::class, 'orokbeadas']);
 
 });
 
