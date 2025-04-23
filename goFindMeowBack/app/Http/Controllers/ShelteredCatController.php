@@ -27,7 +27,8 @@ class ShelteredCatController extends Controller
             'medical_record' => 'nullable|string|max:200',
             's_status' => 'nullable|string|in:a,e,d', 
             'chip_number' => 'nullable|numeric',
-            'breed' => 'nullable|string|max:100', 
+            'breed' => 'nullable|string|max:100',
+        ]);
 
 
 
@@ -43,13 +44,13 @@ class ShelteredCatController extends Controller
         $shelteredCat = ShelteredCat::create([
             'rescuer' => Auth::id(), 
             'report' => $report->report_id, 
-            'owner' => $validatedData['owner'] ?? null,
+            'owner' => $validatedData['owner'] ?? null, 
             'adoption_date' => $validatedData['adoption_date'] ?? null, 
-            'kennel_number' => $validatedData['kennel_number'] ?? null,
+            'kennel_number' => $validatedData['kennel_number'] ?? null, 
             'medical_record' => $validatedData['medical_record'] ?? null, 
             's_status' => $validatedData['status'] ?? null, 
             'chip_number' => $validatedData['chip_number'] ?? null,
-            'breed' => $validatedData['breed'] ?? null,
+            'breed' => $validatedData['breed'] ?? null, 
         ]);
 
         return response()->json(['message' => 'Macska befogva.', 'report' => $report], 201);
@@ -104,7 +105,7 @@ class ShelteredCatController extends Controller
     }
 
     $cat->update($validated);
-    $cat->refresh();
+    $cat->refresh(); // újratölti az adatbázisból a friss adatokat
     return response()->json([
         'message' => 'Bejelentés frissítve.',
         'report' => $cat
@@ -119,7 +120,7 @@ public function search(Request $request)
         ->select('sheltered_cats.*', 'reports.status', 'reports.address', 'reports.color', 'reports.pattern', 'reports.other_identifying_marks', 'reports.health_status','reports.photo', 'reports.circumstances', 'reports.chip_number as report_chip', 'reports.number_of_individuals', 'reports.disappearance_date', 'reports.creator_id');
 
 
-
+    // Keresés
     if ($keyword) {
         $query->where(function ($q) use ($keyword) {
             $q->where('sheltered_cats.kennel_number', 'like', "%$keyword%")
@@ -148,6 +149,7 @@ public function orokbeadas(Request $request, $id)
 {
     $cat = ShelteredCat::findOrFail($id);
 
+    // Email alapján keresünk user-t
     $user = User::where('email', $request->input('owner_email'))->firstOrFail();
 
     $cat->s_status = 'o';
