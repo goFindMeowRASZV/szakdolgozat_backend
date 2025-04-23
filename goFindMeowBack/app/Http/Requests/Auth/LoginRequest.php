@@ -37,37 +37,20 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    use Illuminate\Validation\ValidationException;
-    use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\RateLimiter;
-    
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-    
-        $credentials = $this->only('email', 'password');
-    
-        if (!Auth::attempt($credentials, $this->boolean('remember'))) {
+
+        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-    
+
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
         }
-    
-        $user = Auth::user();
-    
-        if (is_null($user->email_verified_at)) {
-            Auth::logout();
-    
-            throw ValidationException::withMessages([
-                'email' => 'Kérlek, erősítsd meg az emailed, mielőtt belépsz.',
-            ]);
-        }
-    
+
         RateLimiter::clear($this->throttleKey());
     }
-    
 
     /**
      * Ensure the login request is not rate limited.
