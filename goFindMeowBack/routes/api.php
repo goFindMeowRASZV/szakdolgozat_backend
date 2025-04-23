@@ -20,9 +20,12 @@ use Illuminate\Support\Facades\Route;
 
 // Ezeket bárki elérheti:
 Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
-
 Route::get('/get-map-reports', [ReportController::class, 'get_map_reports']);
 Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
+Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
+Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
+Route::get('/reports-search', [ReportController::class, 'search']);
+Route::get('/sheltered-reports-search', [ShelteredCatController::class, 'search']);
 
 // Autentikáció
 Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
@@ -56,10 +59,6 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
     Route::post('/create-report', [ReportController::class, 'store']);
     Route::get('/get-reports', [ReportController::class, 'index']);
     Route::post('/create-comment', [CommentController::class, 'store']);
-    Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
-    Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
-    Route::get('/reports-search', [ReportController::class, 'search']);
-    Route::get('/sheltered-reports-search', [ShelteredCatController::class, 'search']);
 
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
     Route::put('/change-password', [UserController::class, 'changePassword']);
