@@ -50,12 +50,10 @@ class AdoptionRequestController extends Controller
 
         $defaultImagePath = public_path('kepek/user.jpg');
 
-        // Fájl elérési útja a storage-ból
         $userImagePath = $userImageFilename
             ? storage_path('app/public/profile_pictures/' . $userImageFilename)
             : $defaultImagePath;
 
-        // Ha a megadott fájl nem létezik, állítsuk be a defaultot
         if (!file_exists($userImagePath)) {
             $userImagePath = $defaultImagePath;
         }
@@ -66,7 +64,6 @@ class AdoptionRequestController extends Controller
 
         try {
             Mail::to($user['email'])->send(new OrokbefogadasErtesito(
-            //Mail::to('viktoriaszalkai04@gmail.com')->send(new OrokbefogadasErtesito(
                 $user['name'],
                 $report['color'],
                 $report['pattern'],

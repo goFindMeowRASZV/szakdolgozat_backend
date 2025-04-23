@@ -62,7 +62,6 @@ class UserController extends Controller
 
         $user = $request->user();
 
-        // töröljük az előző képet, ha van
         if ($user->profile_picture) {
             Storage::delete($user->profile_picture);
         }
@@ -113,7 +112,6 @@ public function createUser(Request $request)
         return response()->json(['message' => 'Nincs jogosultság.'], 403);
     }
 
-    // Staff nem hozhat létre admint vagy usert
     if ($currentRole === 1 && $request->role !== 1) {
         return response()->json(['message' => 'Staff csak staffot hozhat létre.'], 403);
     }

@@ -3,28 +3,20 @@
 use App\Http\Controllers\AdoptionRequestController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShelteredCatController;
 use App\Http\Controllers\UserController;
-use App\Models\ShelteredCat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// ------------------------------
-// Role-based middleware usage:
-// 'role:admin' = role 0
-// 'role:staff' = role 1
-// 'role:user' = role 2
-// ------------------------------
 
-// Ezeket bárki elérheti:
+// vendeg
 Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_reports']);
 
 Route::get('/get-map-reports', [ReportController::class, 'get_map_reports']);
 Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
 
-// Autentikáció
+// auth
 Route::middleware('auth:sanctum')->get('/whoami', function (Request $request) {
     return response()->json([
         'id' => $request->user()->id,
@@ -82,7 +74,7 @@ Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
 
 });
 
-// AUTHENTICATED USER 
+// USER 
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/user', fn(Request $request) => $request->user());
 

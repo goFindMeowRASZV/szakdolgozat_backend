@@ -26,7 +26,6 @@ class ReportController extends Controller
             return $query->whereIn('status', ['l', 't', 'k']);
         })
             ->when($role == 2, function ($query) {
-                // User: csak l, t, k státuszt és aktívakat lát
                 return $query->whereIn('status', ['l', 't', 'k'])
                     ->where('activity', '1');
             })
@@ -55,14 +54,12 @@ class ReportController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        // Autentikált?
         if (!Auth::check()) {
             return response()->json(['error' => 'No user logged in.'], 401);
         }
 
         $creatorId = Auth::id();
 
-        // Validáció
         $validatedData = $request->validate([
             'photo' => 'nullable|mimes:jpg,png,gif,jpeg,svg|max:2048',
             'status' => 'required|string|max:1',
@@ -81,7 +78,6 @@ class ReportController extends Controller
         ]);
 
 
-        // Fájlkezelés, ha van feltöltött kép
         $imagePath = null;
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
@@ -91,7 +87,6 @@ class ReportController extends Controller
             $imagePath = url('uploads/' . $imageName);
         }
 
-        // Adatok mentése az adatbázisba
         $report = Report::create([
             'creator_id' => $creatorId,  
             'status' => $validatedData['status'],
@@ -119,7 +114,7 @@ class ReportController extends Controller
     {
         $reports = DB::table('reports as r')
             ->join('sheltered_cats as sc', 'sc.report', '=', 'r.report_id')
-            ->whereIn(DB::raw('LOWER(sc.s_status)'), ['a', 'e']) // kisbetűs összehasonlítás
+            ->whereIn(DB::raw('LOWER(sc.s_status)'), ['a', 'e']) 
             ->get();
     
         return $reports;
@@ -128,7 +123,7 @@ class ReportController extends Controller
     {
         $reports = DB::table('reports as r')
             ->join('sheltered_cats as sc', 'sc.report', '=', 'r.report_id')
-            ->where(DB::raw('LOWER(sc.s_status)'), 'o') // csak az 'o' státuszú cicák
+            ->where(DB::raw('LOWER(sc.s_status)'), 'o') 
             ->get();
     
         return $reports;
@@ -142,7 +137,6 @@ class ReportController extends Controller
         $pattern = ($pattern === "*" || empty(trim($pattern))) ? null : trim($pattern);
 
 
-        // Lekérdezés a megfelelő szűrők alkalmazásával
         $reports = DB::table('reports as r')
             ->join('sheltered_cats as sc', 'r.report_id', '=', 'sc.report')
             ->whereIn('r.status', ['m'])
@@ -213,7 +207,6 @@ class ReportController extends Controller
 
         $report->update($validated);
 
-        // Friss adat betöltése és visszaküldése
         $report->refresh();
         return response()->json([
             'message' => 'Bejelentés frissítve.',
@@ -230,7 +223,6 @@ class ReportController extends Controller
 
         $query = Report::query();
 
-        // Admin és staff minden státuszt lát
         if (in_array($role, [0, 1])) {
             $query->whereIn('status', ['l', 't', 'k', 'm']);
         } else {
@@ -270,6 +262,4 @@ class ReportController extends Controller
         return response()->json($reports);
     }
 
-
-    //commit
 }

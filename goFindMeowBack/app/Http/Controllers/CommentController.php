@@ -49,7 +49,7 @@ class CommentController extends Controller
             'report' => ['required', 'exists:reports,report_id'],
             'user' => ['required', 'exists:users,id'],
             'content' => ['required', 'string', 'max:250'],
-            'photo' => ['nullable', 'image', 'max:2048'], // fájlként jön
+            'photo' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $photoUrl = null;
