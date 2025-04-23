@@ -50,7 +50,7 @@ Route::middleware(['auth:sanctum', 'role:admin,staff'])->group(function () {
     Route::put('/update-reports/{id}', [ReportController::class, 'updateReport']);
     Route::put('/update-sheltered-cat/{id}', [ShelteredCatController::class, 'updateShelteredCat']);
     Route::get('/get-adopted-sheltered-reports', [ReportController::class, 'get_adopted_cats']);
-
+    Route::post('/reports/{id}/update-photo', [ReportController::class, 'updatePhoto']);
 });
 
 
@@ -70,7 +70,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/admin/update-user/{id}', [UserController::class, 'update']);
     Route::delete('/admin/delete-user/{id}', [UserController::class, 'destroy']);
     Route::delete('/delete-comment/{report}/{user}', [CommentController::class, 'destroy']);
-
 });
 
 // STAFF 
@@ -78,7 +77,6 @@ Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
     Route::delete('/staff/delete-sheltered-cat/{id}', [ShelteredCatController::class, 'destroy']);
     Route::post('/staff/create-sheltered-cat', [ShelteredCatController::class, 'store']);
     Route::patch('/sheltered-cats/{id}/orokbeadas', [ShelteredCatController::class, 'orokbeadas']);
-
 });
 
 // AUTHENTICATED USER 
@@ -88,5 +86,4 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
     Route::post('/orokbefogadas', [AdoptionRequestController::class, 'send']);
-
 });

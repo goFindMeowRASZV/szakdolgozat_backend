@@ -11,8 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
-
+use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
@@ -93,7 +92,7 @@ class ReportController extends Controller
 
         // Adatok mentése az adatbázisba
         $report = Report::create([
-            'creator_id' => $creatorId,  
+            'creator_id' => $creatorId,
             'status' => $validatedData['status'],
             'address' => $validatedData['address'],
             'lat' => $validatedData['lat'] ?? null,
@@ -121,7 +120,7 @@ class ReportController extends Controller
             ->join('sheltered_cats as sc', 'sc.report', '=', 'r.report_id')
             ->whereIn(DB::raw('LOWER(sc.s_status)'), ['a', 'e']) // kisbetűs összehasonlítás
             ->get();
-    
+
         return $reports;
     }
     public function get_adopted_cats()
@@ -130,10 +129,10 @@ class ReportController extends Controller
             ->join('sheltered_cats as sc', 'sc.report', '=', 'r.report_id')
             ->where(DB::raw('LOWER(sc.s_status)'), 'o') // csak az 'o' státuszú cicák
             ->get();
-    
+
         return $reports;
     }
-        
+
 
 
     public function get_sheltered_reports_filter($color, $pattern)
@@ -184,8 +183,30 @@ class ReportController extends Controller
     }
 
 
+    public function updatePhoto(Request $request, $id)
+{
+    $request->validate([
+        'photo' => 'required|image|max:2048'
+    ]);
 
+    $report = Report::findOrFail($id);
 
+    if ($report->photo && str_starts_with($report->photo, '/storage/')) {
+        $oldPath = str_replace('/storage/', '', $report->photo);
+        Storage::disk('public')->delete($oldPath);
+    }
+
+    $path = $request->file('photo')->store('report_photos', 'public');
+
+    $report->photo = asset('/storage/' . $path);
+    $report->save();
+    $report->refresh();
+
+    return response()->json([
+        'message' => 'Kép sikeresen frissítve!',
+        'photo' => $report->photo,
+    ]);
+}
 
     public function updateReport(Request $request, $id)
     {

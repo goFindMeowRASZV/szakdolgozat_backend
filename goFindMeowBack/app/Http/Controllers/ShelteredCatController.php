@@ -94,7 +94,7 @@ class ShelteredCatController extends Controller
         'adoption_date' => 'nullable|date',
         'kennel_number' => 'nullable|integer',
         'medical_record' => 'nullable|string|max:200',
-        's_status' => 'nullable|string|in:a,e,d',
+        's_status' => 'nullable|string|in:a,e,d',//A:Aktív, Ö:Örökbeadva, E:ELpusztult
         'chip_number' => 'nullable|numeric',
         'breed' => 'nullable|string|max:100',
         'photo' => 'nullable|mimes:jpg,png,jpeg,gif,svg|max:2048',
