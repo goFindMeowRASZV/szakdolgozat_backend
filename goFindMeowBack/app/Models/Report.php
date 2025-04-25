@@ -28,7 +28,7 @@ class Report extends Model
         'activity'
     ];
     protected $attributes = [
-        'activity' => 1, // Alapértelmezett érték
+        'activity' => 1,
     ];
 
 

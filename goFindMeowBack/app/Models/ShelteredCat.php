@@ -20,7 +20,6 @@ class ShelteredCat extends Model
         's_status',
         'chip_number',
         'breed',
-   /*      'photo' */
     ];
 
     public function report()

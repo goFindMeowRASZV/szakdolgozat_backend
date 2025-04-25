@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
         Schema::create('reports', function (Blueprint $table) {
@@ -36,7 +34,7 @@ return new class extends Migration
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'm', //látott
+            'status' => 'm', 
             'address' => '1147, Budapest, Baross utca 2',
             'lat'=> 47.455029,
             'lon' =>  19.230738,
@@ -54,15 +52,13 @@ return new class extends Migration
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'm', //látott
-          /*   'expiration_date' => '20250628', */
+            'status' => 'm', 
             'address' => 'Pécel, Maglódi út, 2119',
             'lat'=> 47.463074,
             'lon' =>  19.346008,
             'color' => 'szürke, fehér',
             'pattern' => 'foltos',
             'other_identifying_marks' => 'hosszú szőrű',
-            /* 'needs_help'=> false, */
             'health_status' => null,
             'photo' => 'http://localhost:8000/uploads/caca5.jpg',
             'chip_number' => null,
@@ -75,14 +71,12 @@ return new class extends Migration
         Report::create([
             'creator_id' =>  3,
             'status' => 'l', //látott
-            /* 'expiration_date' => '20250628', */
             'address' => 'Budapest, Rigó u. 6, 1085',
             'lat'=> 47.490510, 
             'lon' =>  19.072686,
             'color' => 'fekete, fehér',
             'pattern' => 'cirmos',
             'other_identifying_marks' => 'pár hónapos lehet',
-            /*  'needs_help'=> false, */
             'health_status' => null,
             'photo' => 'http://localhost:8000/uploads/cica1.jpg',
             'chip_number' => null,
@@ -94,15 +88,13 @@ return new class extends Migration
 
         Report::create([
             'creator_id' =>  3,
-            'status' => 'k', //látott
-            /* 'expiration_date' => '20250628', */
+            'status' => 'k', 
             'address' => 'Budapest, Rákóczi út 15, 1088',
             'lat' => 47.495076,
             'lon' =>  19.063371,
             'color' => 'vörös, fehér',
             'pattern' => 'cirmos',
             'other_identifying_marks' => 'jó vadász',
-            /* 'needs_help'=> false, */
             'health_status' => null,
             'photo' => 'http://localhost:8000/uploads/cica2.jpg',
             'chip_number' => null,
@@ -113,9 +105,7 @@ return new class extends Migration
         ]);
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    
     public function down(): void
     {
         Schema::dropIfExists('reports');

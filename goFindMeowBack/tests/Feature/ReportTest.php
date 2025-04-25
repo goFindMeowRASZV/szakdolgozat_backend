@@ -62,7 +62,6 @@ class ReportTest extends TestCase
 {
     $user = User::where('email', 'admin@admin.hu')->first();
 
-    // Manuálisan létrehozott report a kötelező mezőkkel
     $report = \App\Models\Report::create([
         'creator_id' => $user->id,
         'status' => 'k',
