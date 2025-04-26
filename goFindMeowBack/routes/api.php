@@ -15,8 +15,6 @@ Route::get('/get-sheltered-reports', [ReportController::class, 'get_sheltered_re
 Route::get('/get-map-reports', [ReportController::class, 'get_map_reports']);
 Route::get('/comments/by-report/{reportId}', [CommentController::class, 'getCommentsByReport']);
 Route::get('/get-sheltered-report-filter/{color},{pattern}', [ReportController::class, 'get_sheltered_reports_filter']);
-Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
-Route::get('/reports-search', [ReportController::class, 'search']);
 Route::get('/sheltered-reports-search', [ShelteredCatController::class, 'search']);
 
 // auth
@@ -54,6 +52,10 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
 
     Route::post('/profile-picture', [UserController::class, 'uploadPicture']);
     Route::put('/change-password', [UserController::class, 'changePassword']);
+	Route::get('/reports-search', [ReportController::class, 'search']);
+	Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
+
+
 });
 
 // ADMIN 
