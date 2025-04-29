@@ -72,7 +72,7 @@ class ReportController extends Controller
             'chip_number' => 'nullable|numeric',
             'circumstances' => 'nullable|string|max:250',
             'number_of_individuals' => 'nullable|integer',
-            'disappearance_date' => 'nullable|date',
+            'event_date' => 'nullable|date',
             'activity' => 'required|integer'
         ]);
 
@@ -100,7 +100,7 @@ class ReportController extends Controller
             'chip_number' => $validatedData['chip_number'] ?? null,
             'circumstances' => $validatedData['circumstances'] ?? null,
             'number_of_individuals' => $validatedData['number_of_individuals'] ?? null,
-            'disappearance_date' => $validatedData['disappearance_date'] ?? null,
+            'event_date' => $validatedData['event_date'] ?? null,
             'activity' => $validatedData['activity']
         ]);
 
@@ -215,7 +215,7 @@ class ReportController extends Controller
             'chip_number' => 'nullable|numeric',
             'circumstances' => 'nullable|string|max:250',
             'number_of_individuals' => 'nullable|integer',
-            'disappearance_date' => 'nullable|date',
+            'event_date' => 'nullable|date',
             'photo' => 'nullable|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'activity' => 'nullable|integer',
         ]);
@@ -245,7 +245,7 @@ class ReportController extends Controller
         $query = Report::query();
 
         if (in_array($role, [0, 1])) {
-            $query->whereIn('status', ['l', 't', 'k', 'm']);
+            $query->whereIn('status', ['l', 't', 'k']);
         } else {
             $query->whereIn('status', ['l', 't', 'k'])
                 ->where('activity', 1);
@@ -262,7 +262,7 @@ class ReportController extends Controller
                     ->orWhere('chip_number', 'like', "%$keyword%")
                     ->orWhere('circumstances', 'like', "%$keyword%")
                     ->orWhere('number_of_individuals', 'like', "%$keyword%")
-                    ->orWhere('disappearance_date', 'like', "%$keyword%")
+                    ->orWhere('event_date', 'like', "%$keyword%")
                     ->orWhere('creator_id', 'like', "%$keyword%");
             });
         }

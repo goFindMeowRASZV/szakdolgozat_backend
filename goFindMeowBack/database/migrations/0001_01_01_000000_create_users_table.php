@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-   
+
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
@@ -19,58 +19,82 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone_number', 20)->nullable();
             $table->string('profile_picture', 500)->nullable();
-            $table->integer('role')-> default(2); //admin 0, mento 1, felhasznalo 2
+            $table->integer('role')->default(2); //admin 0, mento 1, felhasznalo 2
             $table->rememberToken();
             $table->timestamps();
         });
 
-        
+
         User::create([
-            'name'=> 'admin',
-            'email'=> 'admin@admin.hu',
-            'password'=> Hash::make('admin1234'),
-            'phone_number'=> '12345677876',
-            'profile_picture'=>'/kepek/user.jpg',
-            'role'=> 0
+            'name' => 'admin',
+            'email' => 'admin@gofindmeow.hu',
+            'password' => Hash::make('Pass1234'),
+            'phone_number' => '12345677876',
+            'profile_picture' => '/kepek/user.jpg',
+            'role' => 0
         ]);
 
         User::create([
-            'name'=> 'staff',
-            'email'=> 'staff@staff.hu',
-            'password'=> Hash::make('staff1234'),
-            'phone_number'=> '12345677877',
-            'profile_picture'=>'/kepek/user.jpg',
-            'role'=> 1
+            'name' => 'Staff Ügyfélszolgálat',
+            'email' => 'staffugyf@gofindmeow.hu',
+            'password' => Hash::make('Pass1234'),
+            'phone_number' => '12345677876',
+            'profile_picture' => '/kepek/user.jpg',
+            'role' => 1
+        ]);
+
+
+        User::create([
+            'name' => 'Staff1',
+            'email' => 'staff1@gofindmeow.hu',
+            'password' => Hash::make('Pass1234'),
+            'phone_number' => '12345677876',
+            'profile_picture' => '/kepek/user.jpg',
+            'role' => 1
         ]);
 
         User::create([
-            'name'=> 'user',
-            'email'=> 'user@user.hu',
-            'password'=> Hash::make('user1234'),
-            'phone_number'=> '12345677878',
-            'profile_picture'=>'/kepek/user.jpg',
-            'role'=> 2
+            'name' => 'Staff2',
+            'email' => 'staff2@gofindmeow.hu',
+            'password' => Hash::make('Pass1234'),
+            'phone_number' => '12345677876',
+            'profile_picture' => '/kepek/user.jpg',
+            'role' => 1
+        ]);
+        User::create([
+            'name' => 'Staff3',
+            'email' => 'staff3@gofindmeow.hu',
+            'password' => Hash::make('Pass1234'),
+            'phone_number' => '12345677876',
+            'profile_picture' => '/kepek/user.jpg',
+            'role' => 1
         ]);
 
-        
         User::create([
-            'name'=> 'user2',
-            'email'=> 'user2@user2.hu',
-            'password'=> Hash::make('user21234'),
-            'phone_number'=> '12345677879',
-            'profile_picture'=>'/kepek/user.jpg',
-            'role'=> 2
+            'name' => 'User1',
+            'email' => 'user1@gofindmeow.hu',
+            'password' => Hash::make('Pass1234'),
+            'phone_number' => '12345677876',
+            'profile_picture' => '/kepek/user.jpg',
+            'role' => 2
         ]);
         User::create([
-            'name'=> 'user3',
-            'email'=> 'user3@user3.hu',
-            'password'=> Hash::make('user31234'),
-            'phone_number'=> '12345677879',
-            'profile_picture'=>'/kepek/user.jpg',
-            'role'=> 2
+            'name' => 'User2',
+            'email' => 'user2@gofindmeow.hu',
+            'password' => Hash::make('Pass1234'),
+            'phone_number' => '12345677876',
+            'profile_picture' => '/kepek/user.jpg',
+            'role' => 2
         ]);
- 
- 
+        User::create([
+            'name' => 'User3',
+            'email' => 'user3@gofindmeow.hu',
+            'password' => Hash::make('Pass1234'),
+            'phone_number' => '12345677876',
+            'profile_picture' => '/kepek/user.jpg',
+            'role' => 2
+        ]);
+
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -87,7 +111,7 @@ return new class extends Migration
         });
     }
 
-   
+
     public function down(): void
     {
         Schema::dropIfExists('users');

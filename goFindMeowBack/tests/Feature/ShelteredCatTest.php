@@ -36,7 +36,7 @@ class ShelteredCatTest extends TestCase
             'pattern' => 'cirmos',
             'activity' => 1,
             'number_of_individuals' => 1,
-            'disappearance_date' => '2024-01-01'
+            'event_date' => '2024-01-01'
         ]);
     }
     public function test_store_sheltered_cat()
