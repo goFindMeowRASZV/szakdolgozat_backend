@@ -66,7 +66,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
 // STAFF 
 Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
-    Route::delete('/staff/delete-sheltered-cat/{id}', [ShelteredCatController::class, 'destroy']);
     Route::post('/staff/create-sheltered-cat', [ShelteredCatController::class, 'store']);
     Route::patch('/sheltered-cats/{id}/orokbeadas', [ShelteredCatController::class, 'orokbeadas']);
 });
