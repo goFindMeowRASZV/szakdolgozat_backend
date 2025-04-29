@@ -24,7 +24,7 @@ class Report extends Model
         'chip_number',
         'circumstances',
         'number_of_individuals',
-        'disappearance_date',
+        'event_date',
         'activity'
     ];
     protected $attributes = [

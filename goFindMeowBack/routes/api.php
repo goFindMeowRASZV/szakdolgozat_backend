@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum', 'role:admin,staff,user'])->group(function () 
 	Route::get('/reports-search', [ReportController::class, 'search']);
 	Route::get('/get-report-filter/{status},{color},{pattern}', [ReportController::class, 'get_reports_filter']);
 
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 });
 
@@ -76,8 +77,5 @@ Route::middleware(['auth:sanctum', 'role:staff'])->group(function () {
 // USER 
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/user', fn(Request $request) => $request->user());
-
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
-
     Route::post('/orokbefogadas', [AdoptionRequestController::class, 'send']);
 });

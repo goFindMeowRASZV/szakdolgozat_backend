@@ -48,7 +48,7 @@ class ShelteredCatController extends Controller
             'adoption_date' => $validatedData['adoption_date'] ?? null, 
             'kennel_number' => $validatedData['kennel_number'] ?? null, 
             'medical_record' => $validatedData['medical_record'] ?? null, 
-            's_status' => $validatedData['status'] ?? null, 
+            's_status' => $validatedData['s_status'], 
             'chip_number' => $validatedData['chip_number'] ?? null,
             'breed' => $validatedData['breed'] ?? null, 
         ]);
@@ -117,7 +117,7 @@ public function search(Request $request)
     $keyword = $request->input('q');
     $query = DB::table('sheltered_cats')
         ->join('reports', 'sheltered_cats.report', '=', 'reports.report_id')
-        ->select('sheltered_cats.*', 'reports.status', 'reports.address', 'reports.color', 'reports.pattern', 'reports.other_identifying_marks', 'reports.health_status','reports.photo', 'reports.circumstances', 'reports.chip_number as report_chip', 'reports.number_of_individuals', 'reports.disappearance_date', 'reports.creator_id');
+        ->select('sheltered_cats.*', 'reports.status', 'reports.address', 'reports.color', 'reports.pattern', 'reports.other_identifying_marks', 'reports.health_status','reports.photo', 'reports.circumstances', 'reports.chip_number as report_chip', 'reports.number_of_individuals', 'reports.event_date', 'reports.creator_id');
 
 
     // Keresés
@@ -136,7 +136,7 @@ public function search(Request $request)
               ->orWhere('reports.health_status', 'like', "%$keyword%")
               ->orWhere('reports.circumstances', 'like', "%$keyword%")
               ->orWhere('reports.number_of_individuals', 'like', "%$keyword%")
-              ->orWhere('reports.disappearance_date', 'like', "%$keyword%")
+              ->orWhere('reports.event_date', 'like', "%$keyword%")
               ->orWhere('reports.creator_id', 'like', "%$keyword%");
         });
     }
